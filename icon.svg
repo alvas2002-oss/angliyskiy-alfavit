@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#ffd43b"/>
+  <polygon points="118,190 150,70 236,150" fill="#8a919d" stroke="#182033" stroke-width="16" stroke-linejoin="round"/>
+  <polygon points="394,190 362,70 276,150" fill="#8a919d" stroke="#182033" stroke-width="16" stroke-linejoin="round"/>
+  <rect x="86" y="128" width="340" height="300" rx="120" fill="#8a919d" stroke="#182033" stroke-width="16"/>
+  <text x="256" y="330" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="118" fill="#182033">ABC</text>
+</svg>

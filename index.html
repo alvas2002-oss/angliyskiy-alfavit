@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffd43b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Алфавит">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} [hidden]{display:none!important}</style>
+<title>Тося и английский алфавит</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&family=Unbounded:wght@700;900&display=swap">
+<style>
+/* Layout: same system as the other Tosya lessons. One narrow column, one step at a time: Tosya + bubble on top,
+   then one card. The lesson's one idea: every letter has a NAME (in the alphabet) and a VOICE (in words). */
+:root{
+  --paper:#f7f5ee; --surface:#ffffff; --ink:#182033; --muted:#5b6377; --line:#182033;
+  --purple:#6c5ce7; --teal:#00ad97; --yellow:#ffd43b; --on-yellow:#182033; --coral:#ff8a65;
+  --tint-p:#ebe8ff; --tint-v:#d9f6f0; --tint-b:#fff1b8; --tint-c:#ffe1d6; --marker:#ffe680;
+  --cat:#8a919d; --cat-dark:#737b88; --cat-ink:#182033; --cat-pink:#f4a3b4;
+  --grid:rgba(108,92,231,.06); --friend:#8ee0ad; --trick:#ff9e8c; --new:#c4baff; --good:#0a7d5d; --bad:#c7364f; --shadow:rgba(24,32,51,.16);
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Nunito","Trebuchet MS",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141828; --surface:#20274a; --ink:#f3f1ff; --muted:#aab1cc; --line:#05070f;
+    --purple:#9d90ff; --coral:#ff9e80; --tint-p:#342d72; --tint-v:#0e4f48; --tint-b:#5c4d10; --tint-c:#5e2c1d; --marker:#6b5a12;
+    --cat:#a2a9b5; --cat-dark:#858d9a; --grid:rgba(160,150,255,.06);
+    --good:#4be0b1; --bad:#ff8ea3; --shadow:rgba(0,0,0,.45); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141828; --surface:#20274a; --ink:#f3f1ff; --muted:#aab1cc; --line:#05070f;
+  --purple:#9d90ff; --coral:#ff9e80; --tint-p:#342d72; --tint-v:#0e4f48; --tint-b:#5c4d10; --tint-c:#5e2c1d; --marker:#6b5a12;
+  --cat:#a2a9b5; --cat-dark:#858d9a; --grid:rgba(160,150,255,.06);
+  --good:#4be0b1; --bad:#ff8ea3; --shadow:rgba(0,0,0,.45); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink); font:600 18px/1.45 var(--body);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.wrap{max-width:720px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:16px 40px; display:flex; flex-direction:column; gap:20px}
+#app{display:flex; flex-direction:column; gap:20px}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible{outline:4px solid var(--purple); outline-offset:3px}
+h1,h2{font-family:var(--display); text-wrap:balance; margin:0; letter-spacing:-.02em}
+h1{font-size:clamp(28px,7.5vw,44px); line-height:1.05}
+h2{font-size:clamp(19px,4.6vw,24px); line-height:1.2}
+p{margin:0}
+.en{font-family:var(--display); letter-spacing:0}
+
+/* top bar */
+.top{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px}
+.brand{font:900 13px/1 var(--body); letter-spacing:.1em; background:var(--yellow); color:var(--on-yellow);
+  border:2px solid var(--line); border-radius:10px; padding:8px 10px; box-shadow:3px 3px 0 var(--line); transform:rotate(-1deg)}
+.home{background:var(--surface); border:2px solid var(--line); border-radius:10px; padding:6px 12px; font:800 14px/1.2 var(--body); box-shadow:0 3px 0 var(--line)}
+.bar{flex:1 1 120px; max-width:260px; height:12px; border:2px solid var(--line); border-radius:8px; background:var(--surface); overflow:hidden}
+.bar i{display:block; height:100%; background:var(--teal)}
+
+/* Tosya + bubble */
+.stage{display:grid; grid-template-columns:auto minmax(0,1fr); gap:18px; align-items:end}
+.tosya{width:120px; height:auto; display:block}
+.art .st{stroke:var(--line); stroke-width:5; stroke-linejoin:round; stroke-linecap:round}
+.art .fur{fill:var(--cat)} .art .fur2{fill:var(--cat-dark)} .art .dark{fill:var(--cat-ink)}
+.art .pink{fill:var(--cat-pink)} .art .none{fill:none}
+.art .mark{fill:var(--yellow)} .art .marktxt{fill:var(--on-yellow); font:900 26px var(--display)}
+.bubble{position:relative; background:var(--surface); border:3px solid var(--line); border-radius:18px;
+  padding:14px 16px; box-shadow:0 6px 0 var(--shadow); font-size:18px; min-width:0}
+.bubble::before{content:""; position:absolute; left:-10px; bottom:26px; width:16px; height:16px; background:var(--surface);
+  border-left:3px solid var(--line); border-bottom:3px solid var(--line); transform:rotate(45deg)}
+.bubble b{font-weight:900}
+.bubble .who{display:block; font:900 12px/1 var(--body); letter-spacing:.1em; color:var(--muted); margin-bottom:6px}
+.listen{display:inline-flex; align-items:center; gap:6px; margin-top:8px; background:var(--tint-p); border:2px solid var(--line);
+  border-radius:10px; padding:4px 12px; font:800 15px/28px var(--body); box-shadow:0 3px 0 var(--line)}
+.listen svg,.snd svg{width:18px; height:18px; flex:none}
+.art .mouth{transform-box:fill-box; transform-origin:center}
+@keyframes talk{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.35)}}
+.talking .bubble{outline:3px solid var(--yellow)}
+.talking .art .mouth{animation:talk .28s ease-in-out infinite}
+.count{font:900 13px/1 var(--body); letter-spacing:.1em; color:var(--muted)}
+
+/* cards */
+.card{background:var(--surface); border:3px solid var(--line); border-radius:18px; box-shadow:0 6px 0 var(--shadow);
+  padding:18px; display:flex; flex-direction:column; gap:14px; min-width:0}
+.letter{display:flex; align-items:baseline; gap:18px; font:900 clamp(96px,30vw,150px)/1 var(--display); letter-spacing:0}
+.letter small{font-size:.62em; color:var(--purple)}
+.chip{align-self:flex-start; border:2px solid var(--line); border-radius:999px; padding:4px 12px; font:900 13px/1.3 var(--body); letter-spacing:.06em}
+.chip.friend{background:var(--tint-v)} .chip.trick{background:var(--tint-c)} .chip.new{background:var(--tint-p)}
+.nv{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.nvb{display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left; border:3px solid var(--line); border-radius:14px;
+  background:var(--tint-b); padding:10px 14px; min-width:0}
+.nvb .lbl{font:900 12px/1 var(--body); letter-spacing:.1em; color:var(--muted); text-transform:uppercase}
+.nvb b{font:800 clamp(20px,5.4vw,26px)/1.2 var(--display)}
+button.nvb{box-shadow:0 5px 0 var(--line)}
+.nvb.voice{background:var(--surface)}
+.snd{display:inline-flex; align-items:center; gap:6px; font:800 14px/1 var(--body); color:var(--muted)}
+.word{display:flex; align-items:center; gap:14px; text-align:left; width:100%; border:3px solid var(--line); border-radius:14px; background:var(--surface);
+  padding:10px 14px; box-shadow:0 5px 0 var(--line); min-width:0}
+.word .em{font-size:48px; line-height:1}
+.word .txt{display:flex; flex-direction:column; min-width:0; flex:1}
+.word .txt b{font:700 clamp(22px,6vw,30px)/1.2 var(--display); overflow-wrap:anywhere}
+.word .txt span{font-weight:800; color:var(--muted); font-size:16px}
+mark{background:var(--marker); color:var(--ink); border-radius:6px; padding:0 3px}
+.silent{color:var(--muted); opacity:.55}
+.note{font:800 15px/1.4 var(--body); color:var(--muted)}
+.note b{color:var(--ink)}
+
+/* concept screens */
+.nvtable{display:grid; grid-template-columns:auto repeat(2,minmax(0,1fr)); gap:8px; align-items:stretch}
+.nvtable > div{border:3px solid var(--line); border-radius:12px; padding:8px 10px; background:var(--surface); min-width:0; font-weight:800}
+.nvtable .h{border:0; background:none; font:900 12px/1 var(--body); letter-spacing:.1em; color:var(--muted); align-self:end; padding-bottom:0}
+.nvtable .who{background:var(--tint-b); font:900 clamp(20px,5vw,28px)/1.1 var(--display); display:grid; place-items:center}
+.nvtable b{font:800 clamp(17px,4.6vw,22px)/1.2 var(--display)}
+.spell{display:flex; flex-wrap:wrap; gap:8px; align-items:stretch}
+.spell .ch{display:flex; flex-direction:column; align-items:center; gap:2px; border:3px solid var(--line); border-radius:12px; padding:8px 12px; background:var(--surface)}
+.spell .ch b{font:900 40px/1 var(--display)}
+.spell .ch span{font:800 18px/1 var(--body); color:var(--purple)}
+.spell .eq{align-self:center; font:900 28px/1 var(--display)}
+.teams{display:grid; gap:10px}
+.team{border:3px solid var(--line); border-radius:14px; padding:12px 14px; display:grid; gap:4px}
+.team.friend{background:var(--tint-v)} .team.trick{background:var(--tint-c)} .team.new{background:var(--tint-p)}
+.team b{font:800 17px/1.2 var(--display)}
+.team .ls{font:900 22px/1.3 var(--display); letter-spacing:.12em; overflow-wrap:anywhere}
+.team span{font-size:15px; font-weight:800; color:var(--muted)}
+
+/* quiz */
+.q{display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center}
+.q .em{font-size:84px; line-height:1}
+.q .bigl{font:900 110px/1 var(--display)}
+.play{display:inline-flex; align-items:center; gap:10px; background:var(--yellow); color:var(--on-yellow); border:3px solid var(--line); border-radius:999px;
+  padding:14px 26px; font:800 18px/1 var(--display); box-shadow:0 5px 0 var(--line)}
+.play svg{width:26px; height:26px}
+.seq{display:flex; flex-wrap:wrap; justify-content:center; gap:8px}
+.seq span{width:54px; height:62px; display:grid; place-items:center; border:3px solid var(--line); border-radius:12px; background:var(--surface);
+  font:900 30px/1 var(--display)}
+.seq span.gap{background:var(--marker); border-style:dashed}
+.opts{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px}
+.opts.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{border:3px solid var(--line); border-radius:16px; background:var(--surface); padding:14px 6px; box-shadow:0 5px 0 var(--line);
+  font:900 clamp(34px,10vw,48px)/1 var(--display); transition:transform .08s; min-width:0}
+.opts.two .opt{font:800 clamp(16px,4.4vw,19px)/1.25 var(--display); padding:16px 10px}
+.opt:not(:disabled):active,.go:not(:disabled):active,.play:active,.word:active,button.nvb:active,.day:active{transform:translateY(4px); box-shadow:0 1px 0 var(--line)}
+.opt:disabled{cursor:default}
+.is-right{outline:4px solid var(--good); outline-offset:2px; background:var(--tint-v)}
+.is-wrong{opacity:.45; box-shadow:none; transform:translateY(4px); text-decoration:line-through}
+.verdict{font-weight:900} .verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+
+.go{align-self:flex-start; background:var(--yellow); color:var(--on-yellow); border:3px solid var(--line); border-radius:14px;
+  padding:14px 26px; font:800 18px/1 var(--display); box-shadow:0 5px 0 var(--line); transition:transform .08s}
+.go.ghost{background:var(--surface); color:var(--ink)}
+.row{display:flex; flex-wrap:wrap; gap:12px; align-items:center}
+
+/* alphabet grid */
+.abc{display:grid; grid-template-columns:repeat(auto-fill,minmax(58px,1fr)); gap:8px}
+.abc button{aspect-ratio:1; max-width:100%; border:3px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:0 4px 0 var(--line);
+  font:900 26px/1 var(--display); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0}
+.abc button small{font:800 11px/1 var(--body); color:var(--muted)}
+.abc button.lit{background:var(--yellow); color:var(--on-yellow)}
+.abc button.lit small{color:var(--on-yellow)}
+.vrow{display:grid; grid-template-columns:auto repeat(2,minmax(0,1fr)); gap:8px; align-items:stretch}
+.vrow .vl{font:900 44px/1 var(--display); display:grid; place-items:center; padding-inline:6px}
+.vrow .word{padding:8px 10px; gap:8px}
+.vrow .word .em{font-size:30px}
+.vrow .word .txt b{font-size:clamp(17px,4.6vw,22px)}
+.vrow .word .txt span{font-size:14px}
+.vhead{display:grid; grid-template-columns:52px repeat(2,minmax(0,1fr)); gap:8px; font:900 12px/1.2 var(--body); letter-spacing:.08em; color:var(--muted)}
+
+/* static word rows (no voice), look-alike comparison, alphabet song */
+.word.static{box-shadow:none}
+.word .txt small.lc{font:800 13px/1.3 var(--body); color:var(--muted)}
+.word .txt small.lc .en{font-size:15px}
+.cmp.new .sign{color:var(--purple)}
+.cmp{display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:10px; align-items:center}
+.cmp .side{display:flex; flex-direction:column; align-items:center; gap:2px; border:3px solid var(--line); border-radius:14px; padding:10px; background:var(--surface)}
+.cmp .side.en-side{background:var(--tint-p)}
+.cmp .side b{font:900 64px/1 var(--display)}
+.cmp .side b.none{color:var(--muted)}
+.cmp .side span{font:800 18px/1.2 var(--body); color:var(--purple)}
+.cmp .side .lbl{font:900 11px/1 var(--body); letter-spacing:.1em; color:var(--muted)}
+.cmp .sign{font:900 44px/1 var(--display)}
+.cmp.friend .sign{color:var(--good)} .cmp.trick .sign{color:var(--bad)}
+.song{display:grid; gap:8px}
+.chunk{display:flex; flex-wrap:wrap; gap:6px}
+.chunk span{min-width:46px; display:flex; flex-direction:column; align-items:center; gap:2px; border:2px solid var(--line); border-radius:10px;
+  padding:6px 6px 4px; background:var(--surface)}
+.chunk b{font:900 24px/1 var(--display)}
+.chunk small{font:800 11px/1 var(--body); color:var(--muted)}
+.chunk .today{background:var(--yellow); color:var(--on-yellow)} .chunk .today small{color:var(--on-yellow)}
+.chunk .later{opacity:.45; border-style:dashed}
+.pts{font:900 16px/1 var(--display); background:var(--yellow); color:var(--on-yellow); border:2px solid var(--line); border-radius:10px; padding:6px 10px}
+.map.mini{width:100%; grid-template-columns:repeat(auto-fill,minmax(32px,1fr))}
+.map.mini span{font-size:15px; border-radius:7px}
+.ask{font:800 20px/1.3 var(--body)}
+.ask b{font:900 clamp(30px,8vw,40px)/1.2 var(--display)}
+.card a{color:var(--purple); font-weight:900}
+
+.vc{display:inline-block; background:var(--purple); color:var(--surface); border-radius:999px; padding:2px 12px; font:900 20px/1.3 var(--body)}
+.map{display:grid; grid-template-columns:repeat(auto-fill,minmax(44px,1fr)); gap:6px}
+.map span{aspect-ratio:1; display:grid; place-items:center; border:2px solid var(--line); border-radius:10px; font:900 22px/1 var(--display)}
+.t-friend{background:var(--friend)} .t-trick{background:var(--trick)} .t-new{background:var(--new)}
+.map span,.legend span{color:var(--on-yellow)}
+.legend{display:flex; flex-wrap:wrap; gap:8px}
+.legend span{border:2px solid var(--line); border-radius:999px; padding:4px 12px; font:900 14px/1.2 var(--body)}
+.pair{display:flex; align-items:center; gap:10px; font:900 40px/1 var(--display)}
+.pair span{min-width:56px; text-align:center; background:var(--surface); border:2px solid var(--line); border-radius:10px; padding:6px 8px}
+/* menu */
+.days{display:grid; gap:12px}
+.day{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:14px; align-items:center; text-align:left; width:100%;
+  border:3px solid var(--line); border-radius:16px; background:var(--surface); padding:12px 14px; box-shadow:0 5px 0 var(--line)}
+.day.now{background:var(--tint-b)}
+.day .n{width:44px; height:44px; display:grid; place-items:center; border:3px solid var(--line); border-radius:12px; background:var(--surface); font:900 20px/1 var(--display)}
+.day.done .n{background:var(--teal); color:var(--on-yellow)}
+.day .t{display:flex; flex-direction:column; gap:2px; min-width:0}
+.day .t b{font:800 clamp(15px,4vw,18px)/1.25 var(--display)}
+.day .t span{font:900 15px/1.3 var(--body); color:var(--muted); letter-spacing:.08em; overflow-wrap:anywhere}
+.day .s{font-size:20px; color:var(--yellow); -webkit-text-stroke:1.5px var(--line); letter-spacing:2px; white-space:nowrap}
+.day .s .off{color:var(--surface)}
+.panel{background:var(--surface); border:3px solid var(--line); border-radius:14px; padding:16px; display:grid; gap:10px; box-shadow:0 6px 0 var(--shadow)}
+.panel.tb{background:var(--tint-b)}
+.panel ul{margin:0; padding-left:20px; display:grid; gap:8px}
+.panel li b{font-weight:900}
+
+/* result */
+.stars{font-size:54px; line-height:1; letter-spacing:6px; color:var(--yellow); -webkit-text-stroke:2px var(--line)}
+.stars .off{color:var(--surface)}
+.score{font:900 clamp(34px,9vw,52px)/1 var(--display); font-variant-numeric:tabular-nums}
+
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.hop{animation:hop .5s ease} .shake{animation:shake .3s ease}
+@media (prefers-reduced-motion: reduce){.hop,.shake,.talking .art .mouth{animation:none} .opt,.go{transition:none}}
+@media (max-width:520px){
+  body{font-size:17px}
+  .tosya{width:84px} .stage{gap:14px}
+  .opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .go{align-self:stretch; text-align:center}
+  .vrow .word .em{display:none}
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">АКАДЕМИЯ ТОСИ · ENGLISH</div>
+    <div class="row" id="nav"></div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<script>
+/* ---------- letters ----------
+   n = name in Russian letters (British names, as at school: Z = «зед»), v = voice (main sound) in Russian letters,
+   w/e/r/tr = example word, its picture, how it reads, translation. ru = the Russian letter it looks like.
+   say = Tosya's explanation (Russian clip); English names/words are separate English clips. */
+const LT = {
+  K:{n:'кей', v:'к', w:'kite', e:'🪁', r:'кайт', tr:'воздушный змей', ru:'К',
+     say:'Это буква «Кей». Она похожа на нашу «К» и звучит так же: «к». Это друг! Её слово — воздушный змей.'},
+  M:{n:'эм', v:'м', w:'mouse', e:'🐭', r:'маус', tr:'мышка', ru:'М',
+     say:'Это буква «Эм». Похожа на нашу «М» и звучит так же: «м». Тоже друг! Её слово — мышка. Мур!'},
+  O:{n:'оу', v:'о', w:'octopus', e:'🐙', r:'октопус', tr:'осьминог', ru:'О',
+     say:'Это буква «Оу». Похожа на нашу «О», и в словах она говорит «о». Друг! Её слово — осьминог.'},
+  T:{n:'ти', v:'т', w:'tiger', e:'🐯', r:'тайгер', tr:'тигр', ru:'Т',
+     say:'Это буква «Ти». Похожа на нашу «Т» и говорит «т». Друг! Её слово — тигр.'},
+  B:{n:'би', v:'б', w:'ball', e:'⚽', r:'бол', tr:'мяч', ru:'В',
+     say:'Это буква «Би». Она похожа на нашу «В», но это обманщица! В словах она говорит «б». Её слово — мяч.'},
+  C:{n:'си', v:'к', w:'cat', e:'🐱', r:'кэт', tr:'кошка', ru:'С', w2:'city', e2:'🏙️', r2:'сити', tr2:'город',
+     say:'Это буква «Си». Похожа на нашу «С», но обычно говорит «к». Её слово — кошка, как я! А иногда она всё-таки говорит «с», как в слове «город».',
+     note:'Обычно <b>C</b> говорит «к». Перед <b>e</b>, <b>i</b>, <b>y</b> говорит «с».'},
+  H:{n:'эйч', v:'х', w:'horse', e:'🐴', r:'хорс', tr:'лошадка', ru:'Н',
+     say:'Это буква «Эйч». Похожа на нашу «Н», но говорит «х». Тихо-тихо, как будто дышишь на стекло. Её слово — лошадка.'},
+  P:{n:'пи', v:'п', w:'pig', e:'🐷', r:'пиг', tr:'поросёнок', ru:'Р',
+     say:'Это буква «Пи». Похожа на нашу «Р», но говорит «п». Её слово — поросёнок.'},
+  A:{n:'эй', v:'э', w:'apple', e:'🍎', r:'эпл', tr:'яблоко', ru:'А',
+     say:'Это буква «Эй». Похожа на нашу «А», но хитрая. Зовут её «эй», а в словах она чаще говорит «э». Её слово — яблоко.',
+     note:'Иногда <b>A</b> говорит своё имя «эй». Когда — узнаем в уроке 8.'},
+  E:{n:'и', v:'э', w:'egg', e:'🥚', r:'эг', tr:'яйцо', ru:'Е',
+     say:'Это буква «И». Да-да, похожа на нашу «Е», а зовут её «и»! А в словах она часто говорит «э». Её слово — яйцо.'},
+  X:{n:'экс', v:'кс', w:'fox', e:'🦊', r:'фокс', tr:'лиса', ru:'Х',
+     say:'Это буква «Экс». Похожа на нашу «Х», но говорит сразу два звука: «кс». Её слово — лиса. Послушай, «кс» в конце слова.'},
+  Y:{n:'уай', v:'й', w:'yo-yo', e:'🪀', r:'йоу-йоу', tr:'йо-йо', ru:'У',
+     say:'Это буква «Уай». Похожа на нашу «У», но в начале слова говорит «й». Её слово — йо-йо, игрушка на верёвочке.'},
+  D:{n:'ди', v:'д', w:'dog', e:'🐶', r:'дог', tr:'собака', ru:'Д',
+     say:'Это буква «Ди». Это наша «Д», только переодетая в английский костюм. Говорит «д», как наша. Её слово — собака.',
+     note:'Не перепутай маленькие <b>b</b> и <b>d</b>. У <b>b</b> сначала палочка, потом животик. У <b>d</b> сначала животик, потом палочка.'},
+  F:{n:'эф', v:'ф', w:'fish', e:'🐟', r:'фиш', tr:'рыбка', ru:'Ф',
+     say:'Это буква «Эф». Наша «Ф» переоделась: от неё осталась одна половинка! Говорит «ф». Её слово — рыбка. Вкусно!'},
+  G:{n:'джи', v:'г', w:'girl', e:'👧', r:'гёрл', tr:'девочка', ru:'Г',
+     say:'Это буква «Джи». Это наша «Г» в костюме, похожа на улитку. Зовут её «джи», а в словах она обычно говорит «г», как наша. Её слово — девочка.'},
+  I:{n:'ай', v:'и', w:'insect', e:'🐞', r:'инсект', tr:'жучок', ru:'И',
+     say:'Это буква «Ай». Это наша «И», переоделась в палочку. Зовут её «ай», а в словах она часто говорит короткое «и». Её слово — жучок.'},
+  J:{n:'джей', v:'дж', w:'juice', e:'🧃', r:'джус', tr:'сок', ru:'ДЖ',
+     say:'Это буква «Джей», похожа на крючок. У нас для её звука нужны сразу две буквы: «Д» и «Ж». А она одна говорит «дж». Её слово — сок.'},
+  L:{n:'эл', v:'л', w:'lion', e:'🦁', r:'лайон', tr:'лев', ru:'Л',
+     say:'Это буква «Эл». Наша «Л» переоделась в уголок. Говорит «л», как наша. Её слово — лев.'},
+  N:{n:'эн', v:'н', w:'nose', e:'👃', r:'ноуз', tr:'нос', ru:'Н',
+     say:'Это буква «Эн». Это наша «Н» в костюме. Осторожно: похожа на нашу «И», но говорит «н». Её слово — нос.',
+     note:'<b>N</b> похожа на нашу И, но это переодетая Н.'},
+  Q:{n:'кью', v:'кв', w:'queen', e:'👑', r:'квин', tr:'королева', ru:'КВ',
+     say:'Это буква «Кью». Она почти всегда ходит с подружкой U, и вместе они говорят «кв», как наши «К» и «В» подряд. Её слово — королева.',
+     note:'<b>Q</b> почти всегда пишется вместе с <b>u</b>: <b>qu</b> говорят «кв».'},
+  R:{n:'а', v:'р', w:'rabbit', e:'🐰', r:'рэбит', tr:'кролик', ru:'Р',
+     say:'Это буква «А». Да, её зовут просто «а»! Это наша «Р» в костюме, похожа на «Я» в зеркале. Говорит «р», только мягко, язычок не дрожит. Её слово — кролик.'},
+  S:{n:'эс', v:'с', w:'sun', e:'☀️', r:'сан', tr:'солнце', ru:'С',
+     say:'Это буква «Эс». Это наша «С», переоделась в змейку. И шипит, как змейка: «с». Её слово — солнце.'},
+  U:{n:'ю', v:'а', w:'umbrella', e:'☂️', r:'амбрэла', tr:'зонтик', ru:'А',
+     say:'Это буква «Ю». Похожа на подкову. Зовут её «ю», а в словах она часто говорит «а», как наша «А». Её слово — зонтик.',
+     note:'Английская <b>A</b> — обманщица, а «а» в словах часто говорит <b>U</b>: umbrella «амбрэла», bus «бас».'},
+  V:{n:'ви', v:'в', w:'volcano', e:'🌋', r:'волкейноу', tr:'вулкан', ru:'В',
+     say:'Это буква «Ви». Вот она, настоящая наша «В», только переодетая в галочку! Говорит «в». Её слово — вулкан.',
+     note:'Не путай: <b>V</b> говорит «в», а <b>B</b> только похожа на нашу В и говорит «б».'},
+  W:{n:'дабл-ю', v:'у', w:'watermelon', e:'🍉', r:'уотэмэлон', tr:'арбуз', ru:'У',
+     say:'Это буква «Дабл-ю», то есть «двойная Ю». Это наша «У», только короткая, губы трубочкой. Её слово — арбуз.'},
+  Z:{n:'зед', v:'з', w:'zebra', e:'🦓', r:'зебра', tr:'зебра', ru:'З',
+     say:'Это буква «Зед». Наша «З» переоделась в зигзаг. Говорит «з», как жужжит комарик. Её слово — зебра. Это последняя буква алфавита!'}
+};
+/* more examples per letter: [word, picture, reading, translation]; the letter is highlighted where it sounds */
+const EX = {
+  K:[['king','🤴','кинг','король'], ['kangaroo','🦘','кэнгуру','кенгуру']],
+  M:[['milk','🥛','милк','молоко'], ['moon','🌙','мун','луна']],
+  O:[['orange','🍊','орындж','апельсин'], ['dog','🐶','дог','собака']],
+  T:[['tomato','🍅','томэйтоу','помидор'], ['train','🚂','трэйн','поезд']],
+  B:[['banana','🍌','бэнана','банан'], ['bear','🐻','бэа','медведь']],
+  C:[['car','🚗','ка','машина']],
+  H:[['house','🏠','хаус','дом'], ['hat','🎩','хэт','шляпа']],
+  P:[['pizza','🍕','пицца','пицца'], ['pen','🖊️','пен','ручка']],
+  A:[['ant','🐜','энт','муравей'], ['cat','🐱','кэт','кошка']],
+  E:[['elephant','🐘','элефант','слон'], ['pen','🖊️','пен','ручка']],
+  X:[['box','📦','бокс','коробка'], ['six','6️⃣','сикс','шесть']],
+  Y:[['yes','✅','йес','да'], ['yellow','🟡','йелоу','жёлтый']],
+  D:[['duck','🦆','дак','утка'], ['door','🚪','до','дверь']],
+  F:[['frog','🐸','фрог','лягушка'], ['flower','🌸','флауэ','цветок']],
+  G:[['green','🟢','грин','зелёный'], ['goat','🐐','гоут','коза']],
+  I:[['igloo','🛖','иглу','иглу'], ['pig','🐷','пиг','поросёнок']],
+  J:[['jam','🍓','джэм','варенье'], ['jeans','👖','джинс','джинсы']],
+  L:[['lemon','🍋','лемон','лимон'], ['leaf','🍃','лиф','листик']],
+  N:[['nest','🪺','нест','гнездо'], ['nine','9️⃣','найн','девять']],
+  Q:[['question','❓','квесчен','вопрос']],
+  R:[['red','🔴','рэд','красный'], ['robot','🤖','роубот','робот']],
+  S:[['snake','🐍','снэйк','змея'], ['star','⭐','ста','звезда']],
+  U:[['up','⬆️','ап','вверх'], ['bus','🚌','бас','автобус']],
+  V:[['violin','🎻','вайолин','скрипка'], ['van','🚐','вэн','фургон']],
+  W:[['window','🪟','уиндоу','окно'], ['wolf','🐺','вулф','волк']],
+  Z:[['zoo','🦒','зу','зоопарк'], ['zero','0️⃣','зироу','ноль']]
+};
+const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const TEAM = {K:'friend', M:'friend', O:'friend', T:'friend',
+  A:'trick', B:'trick', C:'trick', E:'trick', H:'trick', P:'trick', X:'trick', Y:'trick'};
+const team = l => TEAM[l] || 'new';
+const TEAM_NAME = {friend:'ДРУГ', trick:'ОБМАНЩИК', new:'ПЕРЕОДЕТАЯ'};
+const NAME_TTS = l => l === 'Z' ? 'Zed.' : l + '.';
+const SONG = ['A, B, C, D, E, F, G.', 'H, I, J, K.', 'L, M, N, O, P.', 'Q, R, S.', 'T, U, V.', 'W, X.', 'Y and Zed.'];
+
+/* Lesson 8: two voices of vowels. s = short voice, l = long voice (= the letter's name). */
+const VOW = [
+  {L:'A', v:'э', s:{w:'cat', e:'🐱', r:'кэт', tr:'кошка'}, l:{w:'cake', e:'🎂', r:'кейк', tr:'торт'}},
+  {L:'E', v:'э', s:{w:'egg', e:'🥚', r:'эг', tr:'яйцо'}, l:{w:'tree', e:'🌳', r:'три', tr:'дерево'}},
+  {L:'I', v:'и', s:{w:'pig', e:'🐷', r:'пиг', tr:'поросёнок'}, l:{w:'bike', e:'🚲', r:'байк', tr:'велосипед'}},
+  {L:'O', v:'о', s:{w:'dog', e:'🐶', r:'дог', tr:'собака'}, l:{w:'rose', e:'🌹', r:'роуз', tr:'роза'}},
+  {L:'U', v:'а', s:{w:'bus', e:'🚌', r:'бас', tr:'автобус'}, l:{w:'cube', e:'🧊', r:'кьюб', tr:'кубик'}}
+];
+const MAGIC = [['kit','кит','набор','kite','кайт','воздушный змей'], ['pin','пин','булавка','pine','пайн','сосна'],
+  ['not','нот','не','note','ноут','записка'], ['cub','каб','медвежонок','cube','кьюб','кубик'], ['tap','тэп','кран','tape','тейп','скотч']];
+/* k: 's' = short voice, 'l' = says its name */
+const VQUIZ = [
+  {w:'cat', e:'🐱', r:'кэт', k:'s'}, {w:'cake', e:'🎂', r:'кейк', k:'l'}, {w:'pig', e:'🐷', r:'пиг', k:'s'},
+  {w:'bike', e:'🚲', r:'байк', k:'l'}, {w:'dog', e:'🐶', r:'дог', k:'s'}, {w:'rose', e:'🌹', r:'роуз', k:'l'},
+  {w:'bus', e:'🚌', r:'бас', k:'s'}, {w:'cube', e:'🧊', r:'кьюб', k:'l'}, {w:'hat', e:'🎩', r:'хэт', k:'s'},
+  {w:'kite', e:'🪁', r:'кайт', k:'l'}, {w:'fox', e:'🦊', r:'фокс', k:'s'}, {w:'nose', e:'👃', r:'ноуз', k:'l'},
+  {w:'sun', e:'☀️', r:'сан', k:'s'}, {w:'cone', e:'🍦', r:'коун', k:'l'}, {w:'fish', e:'🐟', r:'фиш', k:'s'}
+];
+
+const DAYS = [
+  {title:'Весь алфавит и буквы-друзья', letters:'KMOT',
+   intro:'Сегодня начинаем английский алфавит! Сначала посмотрим на весь алфавит целиком. Потом познакомимся с четырьмя буквами-друзьями и узнаем их секрет. А в конце поиграем.'},
+  {title:'Обманщики', letters:'BCHP',
+   intro:'Сегодня знакомимся с обманщиками. Они похожи на наши буквы, но говорят совсем по-другому. Не верь глазам, верь ушам!'},
+  {title:'Ещё обманщики', letters:'AEXY',
+   intro:'Ещё четыре обманщика. Две из них гласные. Гласные — самые хитрые буквы. Сегодня выучим их главный голос.'},
+  {title:'Переодетые', letters:'DFGIJ',
+   intro:'Сегодня переодетые! Это наши знакомые буквы, только в английских костюмах. Звучат они как наши, а выглядят по-другому. Угадаешь, кто под костюмом?'},
+  {title:'Ещё переодетые', letters:'LNQRS',
+   intro:'Ты уже знаешь семнадцать букв! Сегодня ещё пять наших букв в английских костюмах.'},
+  {title:'Последние буквы', letters:'UVWZ',
+   intro:'Последние четыре буквы! После этого урока ты будешь знать весь английский алфавит.'},
+  {title:'Алфавит по порядку', kind:'order', letters:'',
+   intro:'Ты знаешь все двадцать шесть букв! Теперь выстроим их по порядку. В алфавите у каждой буквы своё место, как у ребят в строю на физкультуре.'},
+  {title:'Почему A говорит «эй»?', kind:'vowels', letters:'',
+   intro:'Помнишь букву «Эй»? Зовут её «эй», а в словах она обычно говорит «э». Но иногда она всё-таки говорит своё имя. Сегодня узнаем когда. Это секрет гласных букв.'}
+];
+
+/* Lesson 1: before the letters = map + teams; after the letters = the secret (name vs what it says in words).
+   Sounds are shown as a purple pill, never in transcription brackets. */
+const CONCEPTS = [
+  {key:'map', mood:'happy', when:'before',
+   say:'Вот весь английский алфавит. В нём двадцать шесть букв, и стоят они по порядку: A, B, C, D… Посмотри на цвета. Зелёные буквы — друзья: они такие же, как наши. Красные — обманщики: похожи на наши, но читаются по-другому. Фиолетовые — переодетые: это наши буквы в английском костюме. Звучат как наши, а выглядят по-другому. Хорошая новость: зелёные ты уже знаешь!'},
+  {key:'teams', mood:'tell', when:'before',
+   say:'Давай посмотрим на каждую команду. Друг: английская K выглядит как наша К и читается так же. Обманщик: B похожа на нашу В, а читается как Б. Поэтому ball — это «бол», а не «вол»! Переодетая: D выглядит совсем не как наша Д, но говорит «д». Это наша Д в костюме!'},
+  {key:'secret', mood:'happy', when:'after',
+   say:'Заметил секрет? Букву K зовут «кей». А в слове она говорит просто «к»: kite — «кайт». Со мной так же: меня зовут Тося, а говорю я «мяу». Так у всех английских букв: зовут её одним способом, а в словах она говорит по-другому.'}
+];
+
+const LINES = {
+  hello:'Привет, Ярослав! Я Тося. Давай выучим английский алфавит. Каждый день один короткий урок. Начинай с урока, который горит жёлтым.',
+  q_name:'Прочитай, как зовут букву, и найди её.',
+  q_word:'Посмотри на картинку и прочитай слово. С какой буквы оно начинается?',
+  q_count:'Мини-игра! Сколько букв в английском алфавите?',
+  q_team:'Мини-игра! Кто это: друг, обманщик или переодетая?',
+  q_callname:'Мини-игра! Как зовут эту букву?',
+  q_sound:'А что она говорит в словах?',
+  q_read:'Мини-игра! Как прочитать это слово? Помни секрет: в словах буквы не называют себя, а говорят.',
+  q_case:'Это маленькая буква. Найди её большую сестру.',
+  q_missing:'Какая буква потерялась?',
+  q_vowel_mini:'Мини-игра! Гласная в этом слове говорит своё имя или короткий голос? Если забыл, нажми «Назад» и посмотри таблицу.',
+  q_vowel:'Посмотри на слово. Есть на конце молчаливая E? Тогда гласная говорит своё имя. Нет? Короткий голос.',
+  song:'А теперь споём весь алфавит! Веди пальчиком по буквам и пой. Сегодняшние буквы жёлтые: найди их в песенке. Буквы, которые ты уже знаешь, — жирные.',
+  alpha:'Ты знаешь все буквы! Назови каждую по порядку, ведя пальчиком. Подсказка серым под буквой. Закрой её пальцем и проверь себя.',
+  vowels:'Вот пять гласных букв. У каждой два голоса. Короткий голос, как в словах «кэт» и «дог». И длинный голос. Он звучит так же, как имя буквы.',
+  magic:'А вот и секрет! Посмотри на слова с буквой «И» на конце, той, что пишется как E. Эта буква молчит, её не слышно. Но она волшебная: заставляет гласную сказать своё имя. Было «кит», стало «кайт». Было «пин», стало «пайн».',
+  res_3:'Ура! Все буквы урока теперь твои. Возьми листок и напиши каждую букву три раза, большую и маленькую.',
+  res_2:'Хорошая работа! Нажми на буквы, где была ошибка, и послушай их ещё раз. А потом напиши каждую букву на листке.',
+  res_1:'Буквы хитрые, это нормально. Давай пройдём урок ещё раз, завтра будет легче.'
+};
+/*DATA-END*/
+
+/* ---------- Tosya's voice: pre-rendered ElevenLabs clips, same voice as lesson 1 ----------
+   A clip's file name is a hash of language + spoken text, so gen-voice-abc.mjs and the page agree
+   without a lookup table. Voice plays only when a button is pressed. */
+/* Voice is off since 2026-10-25: the parent reads Tosya's lines aloud. Clips and gen-voice-abc.mjs are kept;
+   set VOICED = true to bring the listen buttons back. */
+const VOICED = false;
+const plain = html => html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const clipId = (lang, text) => { let h = 0x811c9dc5; for (const ch of lang + '|' + plain(text)) { h ^= ch.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8, '0'); };
+const RU = t => ({lang:'ru', t}), EN = t => ({lang:'en', t});
+const enWord = w => EN(w + '.');
+const player = new Audio();
+let queue = [];
+function talking(on){ document.body.classList.toggle('talking', on); }
+function playNext(){
+  const c = queue.shift();
+  if (!c) { onQueueEnd(); return; }
+  if (c.lit) lightLetter(c.lit);
+  player.src = `audio-abc/${clipId(c.lang, c.t)}.mp3`;
+  player.play().catch(() => {});
+}
+function speak(clips){
+  player.pause(); queue = []; talking(false); lightLetter(null);
+  if (VOICED && clips.length) { queue = clips.slice(); playNext(); }
+}
+player.addEventListener('ended', () => setTimeout(playNext, 350));
+player.addEventListener('play', () => talking(true));
+['pause','ended'].forEach(ev => player.addEventListener(ev, () => talking(false)));
+player.addEventListener('error', () => playNext());
+function onQueueEnd(){ lightLetter(null); }
+function lightLetter(l){
+  document.querySelectorAll('.abc button.lit').forEach(b => b.classList.remove('lit'));
+  if (l) document.querySelectorAll(`.abc button[data-l="${l}"]`).forEach(b => b.classList.add('lit'));
+}
+const SPEAKER = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+let SAYS = [];
+const say = clips => `data-say="${SAYS.push([].concat(clips)) - 1}"`;
+
+/* All clips the page can play; gen-voice-abc.mjs reads this list. */
+function spoken(){
+  const ru = [...Object.values(LINES), ...DAYS.map(d => d.intro), ...CONCEPTS.map(c => c.say), ...Object.values(LT).map(l => l.say)];
+  const en = [...ABC.map(NAME_TTS), ...SONG,
+    ...Object.values(LT).flatMap(l => [l.w, l.w2].filter(Boolean)),
+    ...VOW.flatMap(v => [v.s.w, v.l.w]), ...MAGIC.flatMap(m => [m[0], m[3]]), ...VQUIZ.map(q => q.w), 'dog'].map(w => /[.!?]$/.test(w) ? w : w + '.');
+  const uniq = a => [...new Set(a.map(plain))];
+  return [...uniq(ru).map(RU), ...uniq(en).map(EN)];
+}
+
+/* ---------- progress (per-viewer convenience; the page works without it) ---------- */
+const KEY = 'tosya-abc-v1';
+function loadStars(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+function saveStars(d, n){ try { const s = loadStars(); s[d] = Math.max(s[d] || 0, n); localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+/* ---------- helpers ---------- */
+const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
+const learned = d => DAYS.slice(0, d + 1).flatMap(x => x.letters.split(''));
+const options = (right, pool, n = 4) => shuffle([right, ...shuffle([...new Set(pool)].filter(x => x !== right)).slice(0, n - 1)]);
+const hl = (word, l) => { const i = word.toLowerCase().indexOf(l.toLowerCase()); return i < 0 ? word : `${word.slice(0, i)}<mark>${word.slice(i, i + 1)}</mark>${word.slice(i + 1)}`; };
+const magicE = w => w.endsWith('e') && w !== 'tree' ? `${w.slice(0, -1)}<span class="silent">e</span>` : w;
+const vc = v => `<span class="vc">${v}</span>`;
+const stars = n => '★'.repeat(n) + `<span class="off">${'★'.repeat(3 - n)}</span>`;
+
+/* ---------- lesson plan ---------- */
+function buildPlan(d){
+  const day = DAYS[d];
+  const plan = [{t:'intro'}];
+  if (day.kind === 'order') {
+    plan.push({t:'alpha'});
+    const qs = shuffle(ABC.slice(1, 25)).slice(0, 8).map(l => {
+      const i = ABC.indexOf(l), from = Math.max(0, Math.min(i - 2, 21));
+      return {kind:'missing', right:l, seq:ABC.slice(from, from + 5), opts:options(l, ABC.slice(Math.max(0, i - 4), i + 5))};
+    });
+    plan.push({t:'quiz', qs});
+  } else if (day.kind === 'vowels') {
+    const vmini = shuffle(VOW.flatMap(v => [{...v.s, k:'s'}, {...v.l, k:'l'}])).slice(0, 4).map(it => ({kind:'vowel', right:it.k, it, opts:['l', 's']}));
+    plan.push({t:'vowels'}, {t:'quiz', mini:true, qs:vmini}, {t:'magic'});
+    plan.push({t:'quiz', qs:shuffle(VQUIZ).slice(0, 10).map(q => ({kind:'vowel', right:q.k, it:q, opts:['l', 's']}))});
+  } else {
+    const today = day.letters.split(''), pool = learned(d);
+    const earlier = shuffle(pool.filter(l => !today.includes(l))).slice(0, 2);
+    const concept = c => plan.push({t:'concept', c}, {t:'quiz', mini:true, qs:MINI[c.key]()});
+    if (d === 0) CONCEPTS.filter(c => c.when === 'before').forEach(concept);
+    today.forEach(l => plan.push({t:'letter', l}, {t:'quiz', mini:true, qs:[
+      {kind:'callname', l, right:l, opts:options(l, pool.length >= 4 ? pool : ABC)},
+      {kind:'sound', l, right:LT[l].v, opts:options(LT[l].v, (pool.length >= 4 ? pool : ABC).map(x => LT[x].v))}]}));
+    if (d === 0) CONCEPTS.filter(c => c.when === 'after').forEach(concept);
+    plan.push({t:'song', today, known:pool});
+    plan.push({t:'quiz', qs:shuffle([...today, ...earlier]).map(l => ({kind:'name', right:l, opts:options(l, pool)}))});
+    plan.push({t:'quiz', qs:shuffle(today.filter(l => l !== 'X')).map(l => ({kind:'word', right:l, opts:options(l, pool)}))});
+    plan.push({t:'quiz', qs:shuffle([...today, ...earlier]).map(l => ({kind:'case', right:l, opts:options(l, pool)}))});
+  }
+  plan.push({t:'result'});
+  return plan;
+}
+
+/* mini-games that follow the lesson-1 explanation screens */
+const MINI = {
+  map:() => [{kind:'count', right:'26', opts:shuffle(['10', '26', '33'])}],
+  teams:() => shuffle(['K', 'B', 'D', 'H', 'S']).map(l => ({kind:'team', l, right:team(l), opts:['friend', 'trick', 'new']})),
+  secret:() => [{kind:'read', it:{w:'TOM', ok:'том', bad:'ти-оу-эм', tr:'Том, имя мальчика'}, right:'ok', opts:shuffle(['ok', 'bad'])},
+                {kind:'read', it:{w:'MOM', ok:'мом', bad:'эм-оу-эм', tr:'мама'}, right:'ok', opts:shuffle(['ok', 'bad'])}]
+};
+const TEAM_LABEL = {friend:'Друг', trick:'Обманщик', new:'Переодетая'};
+const TEXT_KINDS = ['vowel', 'team', 'callname', 'sound', 'read', 'count'];
+let S = {d:-1, plan:null, k:0, q:0, wrong:[], solved:false, score:0, total:0, missed:[], fx:''};
+const app = document.getElementById('app');
+const nav = document.getElementById('nav');
+
+function tosya(mood){
+  const mouth = {
+    tell:'<path class="st none mouth" d="M88 108 Q100 116 112 108"/>',
+    ask:'<circle class="st pink mouth" cx="100" cy="112" r="6"/>',
+    happy:'<path class="st pink mouth" d="M82 104 Q100 130 118 104 Z"/>',
+    oops:'<path class="st none mouth" d="M86 112 Q93 104 100 112 T114 112"/>'
+  }[mood] || '';
+  const eyes = mood === 'happy'
+    ? '<path class="st none" d="M66 86 Q76 74 86 86"/><path class="st none" d="M114 86 Q124 74 134 86"/>'
+    : '<circle class="dark" cx="76" cy="84" r="8"/><circle class="dark" cx="124" cy="84" r="8"/>';
+  const mark = mood === 'ask' ? '<circle class="st mark" cx="172" cy="34" r="22"/><text class="marktxt" x="172" y="44" text-anchor="middle">?</text>' : '';
+  const tilt = mood === 'ask' ? ' transform="rotate(-9 100 96)"' : '';
+  return `<svg class="tosya art ${S.fx}" viewBox="0 0 200 214" role="img" aria-label="Тося">
+    <path class="st none" style="stroke:var(--line);stroke-width:24" d="M146 186 Q188 186 182 138"/>
+    <path class="none" style="stroke:var(--cat-dark);stroke-width:14;stroke-linecap:round" d="M146 186 Q188 186 182 138"/>
+    <rect class="st fur2" x="50" y="112" width="100" height="92" rx="36"/>
+    <rect class="st fur" x="58" y="168" width="26" height="34" rx="12"/><rect class="st fur" x="122" y="168" width="26" height="34" rx="12"/>
+    <g${tilt}>
+      <polygon class="st fur" points="44,66 54,12 96,44"/><polygon class="st fur" points="156,66 146,12 104,44"/>
+      <rect class="st fur" x="34" y="36" width="132" height="100" rx="42"/>
+      ${eyes}<polygon class="pink" points="94,96 106,96 100,103"/>${mouth}
+      <path class="st none" style="stroke-width:3" d="M58 100 H34 M60 108 L38 116 M142 100 H166 M140 108 L162 116"/>
+    </g>${mark}
+  </svg>`;
+}
+
+/* Tosya's bubble: html is what she shows, text is what the listen button plays (defaults to the html) */
+function stage(mood, html, text){
+  const t = plain(text === undefined ? html : text);
+  return `<section class="stage">${tosya(mood)}<div class="bubble" aria-live="polite"><span class="who">${VOICED ? 'ТОСЯ ГОВОРИТ' : 'ВЗРОСЛЫЙ ЧИТАЕТ ЗА ТОСЮ'}</span>${html}
+    ${VOICED && t ? `<br><button class="listen" ${say(RU(t))}>${SPEAKER}Послушать Тосю</button>` : ''}</div></section>`;
+}
+const wordBtn = (w, e, r, tr, inner) => VOICED
+  ? `<button class="word" ${say(enWord(w))}><span class="em" aria-hidden="true">${e}</span>
+  <span class="txt"><b class="en">${inner || w}</b><span>«${r}» · ${tr}</span></span><span class="snd">${SPEAKER}</span></button>`
+  : `<div class="word static">${e ? `<span class="em" aria-hidden="true">${e}</span>` : ''}
+  <span class="txt"><b class="en">${inner || w}</b><span>«${r}» · ${tr}</span></span></div>`;
+/* example word in CAPITALS (the letter the child has just met), lowercase spelling underneath */
+const wordCaps = (w, e, r, tr, l) => `<div class="word static">${e ? `<span class="em" aria-hidden="true">${e}</span>` : ''}
+  <span class="txt"><b class="en">${hl(w.toUpperCase(), l)}</b><span>«${r}» · ${tr}</span><small class="lc">маленькими: <span class="en">${w}</span></small></span></div>`;
+/* alphabet in song chunks; today's letters yellow, learned bold, the rest faded */
+const songRows = (today, known) => SONG_CHUNKS.map(ch => `<div class="chunk">${ch.map(l =>
+  `<span class="${today.includes(l) ? 'today' : known.includes(l) ? 'known' : 'later'}"><b>${l}</b><small>${LT[l].n}</small></span>`).join('')}</div>`).join('');
+const SONG_CHUNKS = ['ABCDEFG', 'HIJK', 'LMNOP', 'QRS', 'TUV', 'WX', 'YZ'].map(s => s.split(''));
+const SONG_LINK = 'https://www.youtube.com/results?search_query=ABC+song+for+kids';
+
+/* ---------- screens ---------- */
+function menu(){
+  const st = loadStars();
+  const now = DAYS.findIndex((_, i) => !st[i]);
+  const list = DAYS.map((d, i) => `<button class="day ${st[i] ? 'done' : ''} ${i === now ? 'now' : ''}" data-act="day" data-d="${i}">
+      <span class="n">${i + 1}</span>
+      <span class="t"><b>${d.title}</b><span>${d.letters ? d.letters.split('').join(' ') : (d.kind === 'order' ? 'A → Z' : 'A E I O U')}</span></span>
+      <span class="s" aria-label="${st[i] || 0} из 3">${st[i] ? stars(st[i]) : ''}</span></button>`).join('');
+  return `${stage('happy', LINES.hello)}
+    <h1>Английский алфавит</h1>
+    <div class="days">${list}</div>
+    <div class="panel tb">
+      <h2>Для взрослого</h2>
+      <ul>
+        <li><b>Текст в облачке Тоси читаете вы</b>, вслух, от лица Тоси. Под ним картинки и примеры: показывайте пальцем.</li>
+        <li><b>8 уроков, по одному в день</b>, 10–15 минут. Урок можно проходить сколько угодно раз.</li>
+        <li>Каждый урок: новые буквы → примеры → <b>песенка алфавита целиком</b> (порядок учится повторением каждый день) → игры.</li>
+        <li>Главная идея: у буквы есть <b>имя</b> (как её называют в алфавите) и <b>голос</b> (как она звучит в словах). Отсюда вся путаница «B — это би или б?».</li>
+        <li>Буквы идут не по алфавиту, а по сходству с русскими: <b>друзья</b> (выглядят и звучат как наши), <b>обманщики</b> (похожи, но звучат иначе), <b>переодетые</b> (наши буквы в другом костюме: D = Д, L = Л, Z = З). Весь алфавит по порядку виден с первого экрана и поётся в каждом уроке, а в уроке 7 закрепляется.</li>
+        <li><b>Транскрипцию не используем</b>, ни слово, ни скобки. Что буква «говорит» в словах — фиолетовая плашка. Когда в школе дойдут до значков, скажите: «это та же плашка, только значками».</li>
+        <li>После урока — на бумаге: каждую букву дня 3 раза, большую и маленькую, называя имя вслух.</li>
+        <li>Имена букв британские, как в школьных учебниках: Z — «зед», R — «а».</li>
+      </ul>
+    </div>`;
+}
+
+function introScreen(){
+  const d = DAYS[S.d];
+  return `${stage('happy', d.intro)}
+    <h1>Урок ${S.d + 1}. ${d.title}</h1>
+    <div class="row"><button class="go" data-act="next">Начать урок</button></div>`;
+}
+
+function conceptScreen(c){
+  const body = {
+    map:`<h2>Английский алфавит: 26 букв</h2>
+      <div class="map en">${ABC.map(l => `<span class="t-${team(l)}">${l}</span>`).join('')}</div>
+      <div class="legend"><span class="t-friend">друзья</span><span class="t-trick">обманщики</span><span class="t-new">переодетые</span></div>`,
+    teams:`<h2>Три команды букв</h2>
+      <div class="teams">
+        <div class="team friend"><b>Друзья: как наши</b><div class="pair"><span class="en">K</span>=<span>К</span></div>${wordCaps('kite', '🪁', 'кайт', 'воздушный змей', 'K')}<div class="ls en">K M O T</div></div>
+        <div class="team trick"><b>Обманщики: похожи, но читаются иначе</b><div class="pair"><span class="en">B</span>≠<span>В</span></div>${wordCaps('ball', '⚽', 'бол, а не «вол»', 'мяч', 'B')}<div class="ls en">A B C E H P X Y</div></div>
+        <div class="team new"><b>Переодетые: наши буквы в костюме</b><div class="pair"><span>Д</span>→<span class="en">D</span></div>${wordCaps('dog', '🐶', 'дог', 'собака', 'D')}<div class="ls en">D F G I J L N Q R S U V W Z</div></div>
+      </div>`,
+    secret:`<h2>Секрет: зовут и говорит</h2>
+      <div class="nvtable">
+        <div class="h"></div><div class="h">ЗОВУТ</div><div class="h">ГОВОРИТ</div>
+        <div class="who">🐱</div><div><b>Тося</b></div><div><b>мяу</b></div>
+        <div class="who en">K</div><div><b>«кей»</b></div><div>${vc('к')}</div>
+        <div class="who en">M</div><div><b>«эм»</b></div><div>${vc('м')}</div>
+      </div>
+      <div class="spell">
+        <div class="ch"><b class="en">k</b>${vc('к')}</div><div class="ch"><b class="en">i</b>${vc('ай')}</div><div class="ch"><b class="en">t</b>${vc('т')}</div><div class="ch"><b class="en silent">e</b><span>молчит</span></div>
+        <span class="eq">=</span><div class="ch"><b>кайт</b><span>🪁</span></div>
+      </div>
+      <p class="note">Не «кей-ай-ти-и», а просто <b>«кайт»</b>. Имя нужно, чтобы назвать букву. В словах буква говорит.</p>`
+  }[c.key];
+  return `${stage(c.mood, c.say)}<div class="card">${body}</div>
+    <div class="row"><button class="go" data-act="next">Дальше</button></div>`;
+}
+
+/* the look-alike picture: our letter next to the English one, with its sound under each */
+function compare(l){
+  const x = LT[l], tm = team(l);
+  if (tm === 'new') return `<div class="cmp new"><div class="side"><span class="lbl">НАША</span><b>${x.ru}</b>${vc(x.ru.toLowerCase())}</div>
+    <div class="sign">→</div><div class="side en-side"><span class="lbl">В КОСТЮМЕ</span><b class="en">${l}</b>${vc(x.v)}</div></div>
+    <p class="note">${x.ru.length > 1 ? `Для этого звука у нас две буквы, ${x.ru.split('').join(' + ')}, а у англичан одна.` : `Выглядят по-разному, а говорят одинаково. Это наша ${x.ru} переоделась!`}</p>`;
+  return `<div class="cmp ${tm}"><div class="side"><span class="lbl">НАША</span><b>${x.ru}</b>${vc(x.ru.toLowerCase())}</div>
+    <div class="sign">${tm === 'friend' ? '=' : '≠'}</div>
+    <div class="side en-side"><span class="lbl">АНГЛИЙСКАЯ</span><b class="en">${l}</b>${vc(x.v)}</div></div>
+    <p class="note">${tm === 'friend' ? 'Выглядят одинаково и звучат одинаково. Друг!' : `Выглядят похоже, а говорят по-разному. Обманщик!`}</p>`;
+}
+
+function letterScreen(l){
+  const x = LT[l], tm = team(l);
+  const look = tm === 'new' ? `под костюмом наша ${x.ru}` : `похожа на нашу ${x.ru}`;
+  const ex = [[x.w, x.e, x.r, x.tr], ...(x.w2 ? [[x.w2, x.e2, x.r2, x.tr2]] : []), ...(EX[l] || [])];
+  return `${stage('tell', x.say)}
+    <div class="card">
+      <div class="letter en" aria-label="Буква ${l}">${l}<small>${l.toLowerCase()}</small></div>
+      <span class="chip ${tm}">${TEAM_NAME[tm]} · ${look}</span>
+      <div class="nv">
+        <div class="nvb"><span class="lbl">Зовут</span><b>«${x.n}»</b><span class="snd">в алфавите</span></div>
+        <div class="nvb voice"><span class="lbl">Говорит</span>${vc(x.v)}<span class="snd">в словах</span></div>
+      </div>
+      ${compare(l)}
+    </div>
+    <div class="card">
+      <h2>Примеры: где она говорит ${vc(x.v)}?</h2>
+      ${ex.map(e => wordCaps(e[0], e[1], e[2], e[3], l)).join('')}
+      ${x.note ? `<p class="note">${x.note}</p>` : ''}
+      <p class="note">Читайте слово по-русски в кавычках, ребёнок ищет жёлтую букву и повторяет, что она говорит.</p>
+    </div>
+    <div class="row"><button class="go" data-act="next">Дальше</button></div>`;
+}
+
+function songScreen(st){
+  return `${stage('happy', LINES.song)}
+    <div class="card">
+      <h2>Алфавит-песенка</h2>
+      <div class="song en">${songRows(st.today, st.known)}</div>
+      <p class="note">Мелодию проще всего взять из видео: <a href="${SONG_LINK}" target="_blank" rel="noopener">ABC song на YouTube</a>. Одна строчка = один кусочек песни. Последняя строчка поётся «уай энд зед».</p>
+    </div>
+    <div class="row"><button class="go" data-act="next">К играм</button></div>`;
+}
+
+function alphaScreen(){
+  return `${stage('happy', LINES.alpha)}
+    <div class="card">
+      <div class="song en">${songRows('', ABC)}</div>
+      <p class="note">Мелодия: <a href="${SONG_LINK}" target="_blank" rel="noopener">ABC song на YouTube</a>. Сначала поём с видео, потом без него, потом рассказываем без экрана.</p>
+    </div>
+    <div class="row"><button class="go" data-act="next">К заданиям</button></div>`;
+}
+
+function vowelsScreen(){
+  const rows = VOW.map(v => `<div class="vrow"><div class="vl en">${v.L}</div>
+    ${wordBtn(v.s.w, v.s.e, v.s.r, `говорит «${v.v}»`, hl(v.s.w, v.L))}
+    ${wordBtn(v.l.w, v.l.e, v.l.r, `«${LT[v.L].n}»`, hl(v.l.w, v.L))}</div>`).join('');
+  return `${stage('tell', LINES.vowels)}
+    <div class="card">
+      <h2>У гласных два голоса</h2>
+      <div class="vhead"><span></span><span>КОРОТКИЙ ГОЛОС</span><span>ДЛИННЫЙ = ИМЯ</span></div>
+      ${rows}
+    </div>
+    <div class="row"><button class="go" data-act="next">Дальше</button></div>`;
+}
+
+function magicScreen(){
+  const rows = MAGIC.map(m => `<div class="vrow"><div class="vl">→</div>
+    ${wordBtn(m[0], '', m[1], m[2])}${wordBtn(m[3], '', m[4], m[5], magicE(m[3]))}</div>`).join('');
+  return `${stage('happy', LINES.magic)}
+    <div class="card">
+      <h2>Волшебная E на конце</h2>
+      <p class="note">E в конце слова <b>молчит</b>, но гласная перед ней говорит своё <b>имя</b>.</p>
+      ${rows}
+      <p class="note">А в слове <b class="en">tree</b> две E подряд: вместе они тоже говорят имя «и».</p>
+    </div>
+    <div class="row"><button class="go" data-act="next">К заданиям</button></div>`;
+}
+
+function quizScreen(st){
+  const q = st.qs[S.q], n = st.qs.length;
+  const prompt = {count:LINES.q_count, team:LINES.q_team, callname:LINES.q_callname, sound:LINES.q_sound, read:LINES.q_read, name:LINES.q_name, word:LINES.q_word, case:LINES.q_case, missing:LINES.q_missing, vowel:st.mini ? LINES.q_vowel_mini : LINES.q_vowel}[q.kind];
+  let show = '';
+  if (q.kind === 'name') show = `<span class="ask">Найди букву<br><b>«${LT[q.right].n}»</b></span>`;
+  if (q.kind === 'word') show = `<span class="em" aria-hidden="true">${LT[q.right].e}</span>
+    <span class="ask"><b>«${LT[q.right].r}»</b><br>${LT[q.right].tr}</span>`;
+  if (['team', 'callname', 'sound'].includes(q.kind)) show = `<span class="bigl en">${q.l}</span>`;
+  if (q.kind === 'count') show = `<div class="map en mini">${ABC.map(l => `<span class="t-${team(l)}">${l}</span>`).join('')}</div>`;
+  if (q.kind === 'read') show = `<b class="en" style="font-size:52px">${q.it.w}</b><span class="ask">${S.solved ? q.it.tr : '&nbsp;'}</span>`;
+  if (q.kind === 'case') show = `<span class="bigl en">${q.right.toLowerCase()}</span>`;
+  if (q.kind === 'missing') show = `<div class="seq en">${q.seq.map(l => l === q.right && !S.solved ? '<span class="gap">?</span>' : `<span>${l}</span>`).join('')}</div>`;
+  if (q.kind === 'vowel') show = `<span class="em" aria-hidden="true">${q.it.e}</span><b class="en" style="font-size:44px">${magicE(q.it.w)}</b>`;
+  const label = o => ({
+    vowel:() => o === 'l' ? 'Говорит имя' : 'Короткий голос',
+    team:() => TEAM_LABEL[o], callname:() => `«${LT[o].n}»`, sound:() => `«${o}»`,
+    read:() => `«${q.it[o]}»`
+  }[q.kind] || (() => o))();
+  const text = TEXT_KINDS.includes(q.kind);
+  const opts = q.opts.map(o => {
+    const cls = S.solved && o === q.right ? 'is-right' : S.wrong.includes(o) ? 'is-wrong' : '';
+    return `<button class="opt ${text ? '' : 'en'} ${cls}" data-act="pick" data-o="${o}" ${S.solved || S.wrong.includes(o) ? 'disabled' : ''}>${label(o)}</button>`;
+  }).join('');
+  let after = '';
+  if (S.solved) {
+    const x = LT[q.right];
+    const why = ({
+      count:() => `В английском алфавите 26 букв. А в нашем — 33.`,
+      team:() => q.right === 'friend' ? `<b class="en">${q.l}</b> выглядит как наша ${LT[q.l].ru} и говорит так же.`
+        : q.right === 'trick' ? `<b class="en">${q.l}</b> похожа на нашу ${LT[q.l].ru}, а говорит «${LT[q.l].v}».`
+        : `<b class="en">${q.l}</b> — это наша ${LT[q.l].ru} в английском костюме.`,
+      callname:() => `Букву <b class="en">${q.l}</b> зовут «${LT[q.l].n}».`,
+      sound:() => `В словах <b class="en">${q.l}</b> говорит «${q.right}»: <b class="en">${hl(LT[q.l].w.toUpperCase(), q.l)}</b> — «${LT[q.l].r}».`,
+      read:() => `Буквы в слове говорят, а не называют себя: «${q.it.ok}».`,
+      name:() => `Это <b class="en">${q.right}</b>, её зовут «${x && x.n}».`,
+      word:() => `<b class="en">${x && hl(x.w.toUpperCase(), q.right)}</b> — «${x && x.r}». Первая буква <b class="en">${q.right}</b>, она говорит «${x && x.v}».`,
+      case:() => `<b class="en">${q.right.toLowerCase()}</b> и <b class="en">${q.right}</b> — одна буква, «${x && x.n}».`,
+      missing:() => `Между <b class="en">${ABC[ABC.indexOf(q.right) - 1]}</b> и <b class="en">${ABC[ABC.indexOf(q.right) + 1]}</b> стоит <b class="en">${q.right}</b>.`,
+      vowel:() => q.right === 'l' ? `«${q.it.r}»: гласная говорит своё имя.` : `«${q.it.r}»: короткий голос.`
+    })[q.kind]();
+    after = `<p><span class="verdict ok">Верно!</span> ${why}</p>
+      <div class="row"><button class="go" data-act="nextq">${S.q + 1 < n ? 'Следующий' : 'Дальше'}</button></div>`;
+  } else if (S.wrong.length) {
+    after = `<p><span class="verdict no">Не то.</span> Посмотри ещё раз и попробуй снова.</p>`;
+  }
+  const mood = S.solved ? 'happy' : S.wrong.length ? 'oops' : 'ask';
+  return `${stage(mood, prompt)}
+    <div class="card">
+      <span class="count">${st.mini ? 'МИНИ-ИГРА · ' : ''}ВОПРОС ${S.q + 1} ИЗ ${n}</span>
+      <div class="q">${show}</div>
+      <div class="opts ${text ? 'two' : ''}">${opts}</div>
+      ${after}
+    </div>`;
+}
+
+function resultScreen(){
+  const ratio = S.total ? S.score / S.total : 0;
+  const n = ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : 1;
+  saveStars(S.d, n);
+  const missed = [...new Set(S.missed)].filter(l => LT[l]);
+  return `${stage(n === 3 ? 'happy' : 'tell', LINES['res_' + n])}
+    <div class="card">
+      <div class="stars" aria-label="${n} из 3">${stars(n)}</div>
+      <div class="score">${S.score} из ${S.total}</div>
+      <p class="note">баллов: правильных ответов с первой попытки</p>
+      ${missed.length ? `<p class="note">Повтори эти буквы, нажми и послушай:</p><div class="abc">${missed.map(l =>
+        `<button data-l="${l}" ${say(EN(NAME_TTS(l)))}>${l}<small>${LT[l].n}</small></button>`).join('')}</div>` : ''}
+    </div>
+    ${DAYS[S.d].letters ? `<div class="panel tb"><p><b>На листке:</b> напиши каждую букву урока 3 раза, большую и маленькую. Называй её имя вслух: <b class="en">${DAYS[S.d].letters.split('').map(l => l + l.toLowerCase()).join('  ')}</b></p></div>` : ''}
+    <div class="row"><button class="go" data-act="home">К урокам</button><button class="go ghost" data-act="again">Пройти ещё раз</button></div>`;
+}
+
+function render(top){
+  SAYS = [];
+  const st = S.plan && S.plan[S.k];
+  const screens = {song:songScreen, intro:introScreen, concept:s => conceptScreen(s.c), letter:s => letterScreen(s.l), alpha:alphaScreen,
+    vowels:vowelsScreen, magic:magicScreen, quiz:quizScreen, result:resultScreen};
+  app.innerHTML = st ? screens[st.t](st) : menu();
+  nav.innerHTML = st ? `<div class="bar" aria-label="Шаг ${S.k + 1} из ${S.plan.length}"><i style="width:${Math.round(100 * (S.k + 1) / S.plan.length)}%"></i></div>
+    ${S.k > 0 || S.q > 0 ? '<button class="home" data-act="back">← Назад</button>' : ''}<span class="pts" aria-label="Баллы">⭐ ${S.score}</span><button class="home" data-act="home">Все уроки</button>` : '';
+  S.fx = '';
+  if (top) window.scrollTo(0, 0);
+}
+
+function startDay(d){ S = {d, plan:buildPlan(d), k:0, q:0, wrong:[], solved:false, score:0, total:0, missed:[], seen:{}, fx:''}; speak([]); render(true); }
+function next(){ S.k++; S.q = 0; S.wrong = []; S.solved = false; speak([]); render(true); }
+
+document.addEventListener('click', e => {
+  const sb = e.target.closest('[data-say]');
+  if (sb) { const lit = sb.closest('.abc') ? sb.dataset.l : null;
+    speak((SAYS[+sb.dataset.say] || []).map(c => ({...c, lit}))); return; }
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const act = b.dataset.act;
+  if (act === 'day') startDay(+b.dataset.d);
+  if (act === 'home') { S = {d:-1, plan:null, k:0, q:0, wrong:[], solved:false, score:0, total:0, missed:[], seen:{}, fx:''}; speak([]); render(true); }
+  if (act === 'again') startDay(S.d);
+  if (act === 'next') next();
+  if (act === 'back') {
+    if (S.q > 0) S.q--; else { S.k = Math.max(0, S.k - 1); const p = S.plan[S.k]; S.q = p.qs ? p.qs.length - 1 : 0; }
+    S.wrong = []; S.solved = false; speak([]); render(true);
+  }
+  if (act === 'nextq') {
+    const st = S.plan[S.k];
+    if (S.q + 1 < st.qs.length) { S.q++; S.wrong = []; S.solved = false; speak([]); render(false); } else next();
+  }
+  if (act === 'pick') {
+    const q = S.plan[S.k].qs[S.q], o = b.dataset.o;
+    const key = S.k + '-' + S.q, first = !S.seen[key];
+    if (o === q.right) {
+      if (first) { S.seen[key] = 1; S.total++; if (!S.wrong.length) S.score++; }
+      S.solved = true; S.fx = 'hop';
+    } else {
+      if (first && !S.wrong.length && (q.l || LT[q.right])) S.missed.push(q.l || q.right);
+      S.wrong.push(o); S.fx = 'shake';
+    }
+    render(false);
+  }
+});
+
+render(true);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+</script>
+</body>
+</html>
