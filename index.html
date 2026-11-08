@@ -378,6 +378,15 @@ const VQUIZ = [
   {w:'kite', e:'🪁', r:'кайт', k:'l'}, {w:'fox', e:'🦊', r:'фокс', k:'s'}, {w:'nose', e:'👃', r:'ноуз', k:'l'},
   {w:'sun', e:'☀️', r:'сан', k:'s'}, {w:'cone', e:'🍦', r:'коун', k:'l'}, {w:'fish', e:'🐟', r:'фиш', k:'s'}
 ];
+/* Lesson 9: first blending practice. Keep words short and use only familiar short vowels. */
+const READ_WORDS = [
+  {w:'cat', e:'🐱', r:'кэт', tr:'кошка', sounds:['к','э','т']},
+  {w:'dog', e:'🐶', r:'дог', tr:'собака', sounds:['д','о','г']},
+  {w:'sun', e:'☀️', r:'сан', tr:'солнце', sounds:['с','а','н']},
+  {w:'pen', e:'🖊️', r:'пэн', tr:'ручка', sounds:['п','э','н']},
+  {w:'pig', e:'🐷', r:'пиг', tr:'поросёнок', sounds:['п','и','г']},
+  {w:'map', e:'🗺️', r:'мэп', tr:'карта', sounds:['м','э','п']}
+];
 
 const DAYS = [
   {title:'Весь алфавит и буквы-друзья', letters:'KMOT',
@@ -395,7 +404,9 @@ const DAYS = [
   {title:'Алфавит по порядку', kind:'order', letters:'',
    intro:'Ты знаешь все двадцать шесть букв! Теперь выстроим их по порядку. В алфавите у каждой буквы своё место, как у ребят в строю на физкультуре.'},
   {title:'Почему A говорит «эй»?', kind:'vowels', letters:'',
-   intro:'Помнишь букву «Эй»? Зовут её «эй», а в словах она обычно говорит «э». Но иногда она всё-таки говорит своё имя. Сегодня узнаем когда. Это секрет гласных букв.'}
+   intro:'Помнишь букву «Эй»? Зовут её «эй», а в словах она обычно говорит «э». Но иногда она всё-таки говорит своё имя. Сегодня узнаем когда. Это секрет гласных букв.'},
+  {title:'Складываем буквы в слова', kind:'reading', letters:'',
+   intro:'Сегодня будем читать первые настоящие слова. Буквы в слове не называют себя. Каждая говорит свой короткий звук, а потом мы складываем звуки вместе: к — э — т, получается «кэт».'}
 ];
 
 /* Lesson 1: before the letters = map + teams; after the letters = the secret (name vs what it says in words).
@@ -426,6 +437,7 @@ const LINES = {
   alpha:'Ты знаешь все буквы! Назови каждую по порядку, ведя пальчиком. Подсказка серым под буквой. Закрой её пальцем и проверь себя.',
   vowels:'Вот пять гласных букв. У каждой два голоса. Короткий голос, как в словах «кэт» и «дог». И длинный голос. Он звучит так же, как имя буквы.',
   magic:'А вот и секрет! Посмотри на слова с буквой «И» на конце, той, что пишется как E. Эта буква молчит, её не слышно. Но она волшебная: заставляет гласную сказать своё имя. Было «кит», стало «кайт». Было «пин», стало «пайн».',
+  reading:'Читаем по частям. Сначала показываем пальцем на каждую букву и произносим её короткий голос: к — э — т. Не делаем большие паузы, а быстро соединяем звуки. К — Э — Т… «кэт»! Так буквы превращаются в слово.',
   res_3:'Ура! Все буквы урока теперь твои. Возьми листок и напиши каждую букву три раза, большую и маленькую.',
   res_2:'Хорошая работа! Нажми на буквы, где была ошибка, и послушай их ещё раз. А потом напиши каждую букву на листке.',
   res_1:'Буквы хитрые, это нормально. Давай пройдём урок ещё раз, завтра будет легче.'
@@ -508,6 +520,9 @@ function buildPlan(d){
     const vmini = shuffle(VOW.flatMap(v => [{...v.s, k:'s'}, {...v.l, k:'l'}])).slice(0, 4).map(it => ({kind:'vowel', right:it.k, it, opts:['l', 's']}));
     plan.push({t:'vowels'}, {t:'quiz', mini:true, qs:vmini}, {t:'magic'});
     plan.push({t:'quiz', qs:shuffle(VQUIZ).slice(0, 10).map(q => ({kind:'vowel', right:q.k, it:q, opts:['l', 's']}))});
+  } else if (day.kind === 'reading') {
+    plan.push({t:'reading'});
+    plan.push({t:'quiz', qs:shuffle(READ_WORDS).map(it => ({kind:'read', it:{w:it.w.toUpperCase(), ok:it.r, bad:it.w.split('').map(l => LT[l.toUpperCase()]?.n || l).join('-'), tr:it.tr}, right:'ok', opts:shuffle(['ok', 'bad'])}))});
   } else {
     const today = day.letters.split(''), pool = learned(d);
     const earlier = shuffle(pool.filter(l => !today.includes(l))).slice(0, 2);
@@ -600,12 +615,12 @@ function menu(){
       <h2>Для взрослого</h2>
       <ul>
         <li><b>Текст в облачке Тоси читаете вы</b>, вслух, от лица Тоси. Под ним картинки и примеры: показывайте пальцем.</li>
-        <li><b>8 уроков, по одному в день</b>, 10–15 минут. Урок можно проходить сколько угодно раз.</li>
+        <li><b>9 уроков, по одному в день</b>, 10–15 минут. Урок можно проходить сколько угодно раз.</li>
         <li>Каждый урок: новые буквы → примеры → <b>песенка алфавита целиком</b> (порядок учится повторением каждый день) → игры.</li>
         <li>Главная идея: у буквы есть <b>имя</b> (как её называют в алфавите) и <b>голос</b> (как она звучит в словах). Отсюда вся путаница «B — это би или б?».</li>
         <li>Буквы идут не по алфавиту, а по сходству с русскими: <b>друзья</b> (выглядят и звучат как наши), <b>обманщики</b> (похожи, но звучат иначе), <b>переодетые</b> (наши буквы в другом костюме: D = Д, L = Л, Z = З). Весь алфавит по порядку виден с первого экрана и поётся в каждом уроке, а в уроке 7 закрепляется.</li>
         <li><b>Транскрипцию не используем</b>, ни слово, ни скобки. Что буква «говорит» в словах — фиолетовая плашка. Когда в школе дойдут до значков, скажите: «это та же плашка, только значками».</li>
-        <li>После урока — на бумаге: каждую букву дня 3 раза, большую и маленькую, называя имя вслух.</li>
+        <li>После урока — на бумаге: в уроках с буквами каждую букву дня 3 раза, большую и маленькую, называя имя вслух. После урока 9 можно написать и прочитать слова <b>cat, dog, sun</b>.</li>
         <li>Имена букв британские, как в школьных учебниках: Z — «зед», R — «а».</li>
       </ul>
     </div>`;
@@ -726,6 +741,20 @@ function magicScreen(){
     <div class="row"><button class="go" data-act="next">К заданиям</button></div>`;
 }
 
+function readingScreen(){
+  const first = READ_WORDS[0];
+  const blend = first.sounds.map((sound, i) => `<div class="ch"><b class="en">${first.w[i]}</b>${vc(sound)}</div>`).join('<span class="eq">+</span>');
+  const rows = READ_WORDS.slice(1).map(x => `<div class="word static"><span class="em" aria-hidden="true">${x.e}</span><span class="txt"><b class="en">${x.w}</b><span>«${x.r}» · ${x.tr}</span></span></div>`).join('');
+  return `${stage('happy', LINES.reading)}
+    <div class="card">
+      <h2>Соединяем звуки</h2>
+      <div class="spell">${blend}<span class="eq">→</span><div class="ch"><b>${first.r}</b><span>${first.e}</span></div></div>
+      <p class="note">Произнеси звуки слитно, почти без пауз: <b>к—э—т… кэт!</b> Буквы складываются, как кубики.</p>
+    </div>
+    <div class="card"><h2>Попробуй прочитать</h2>${rows}</div>
+    <div class="row"><button class="go" data-act="next">К игре</button></div>`;
+}
+
 function quizScreen(st){
   const q = st.qs[S.q], n = st.qs.length;
   const prompt = {count:LINES.q_count, team:LINES.q_team, callname:LINES.q_callname, sound:LINES.q_sound, read:LINES.q_read, name:LINES.q_name, word:LINES.q_word, case:LINES.q_case, missing:LINES.q_missing, vowel:st.mini ? LINES.q_vowel_mini : LINES.q_vowel}[q.kind];
@@ -802,7 +831,7 @@ function render(top){
   SAYS = [];
   const st = S.plan && S.plan[S.k];
   const screens = {song:songScreen, intro:introScreen, concept:s => conceptScreen(s.c), letter:s => letterScreen(s.l), alpha:alphaScreen,
-    vowels:vowelsScreen, magic:magicScreen, quiz:quizScreen, result:resultScreen};
+    vowels:vowelsScreen, magic:magicScreen, reading:readingScreen, quiz:quizScreen, result:resultScreen};
   app.innerHTML = st ? screens[st.t](st) : menu();
   nav.innerHTML = st ? `<div class="bar" aria-label="Шаг ${S.k + 1} из ${S.plan.length}"><i style="width:${Math.round(100 * (S.k + 1) / S.plan.length)}%"></i></div>
     ${S.k > 0 || S.q > 0 ? '<button class="home" data-act="back">← Назад</button>' : ''}<span class="pts" aria-label="Баллы">⭐ ${S.score}</span><button class="home" data-act="home">Все уроки</button>` : '';
