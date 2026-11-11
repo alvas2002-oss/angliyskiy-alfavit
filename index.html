@@ -233,6 +233,43 @@ mark{background:var(--marker); color:var(--ink); border-radius:6px; padding:0 3p
 .stars .off{color:var(--surface)}
 .score{font:900 clamp(34px,9vw,52px)/1 var(--display); font-variant-numeric:tabular-nums}
 
+/* reading course */
+.rd{font:800 clamp(52px,16vw,84px)/1.1 var(--display); letter-spacing:.02em; overflow-wrap:anywhere}
+.rd.long{font-size:clamp(28px,8vw,44px); line-height:1.3}
+.rd mark{padding:0 4px}
+.ans{display:grid; gap:6px; text-align:center; background:var(--tint-p); border:3px solid var(--line); border-radius:14px; padding:12px; font-size:20px}
+.ans .em{font-size:40px; line-height:1}
+.ans b{font-weight:900}
+.vgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); gap:8px}
+.vgrid > div{display:flex; flex-direction:column; align-items:center; gap:4px; border:2px solid var(--line); border-radius:12px; padding:8px 4px; background:var(--surface)}
+.vgrid > div.trap{background:var(--tint-c)}
+.vgrid b{font:900 30px/1 var(--display)}
+.vgrid .vc{font-size:16px; padding:1px 8px}
+.trows{display:grid; gap:8px}
+.trow{display:grid; grid-template-columns:48px minmax(0,1fr) minmax(0,1fr); gap:4px 10px; align-items:center; border:2px solid var(--line); border-radius:12px; padding:8px 10px; background:var(--tint-c)}
+.trow > b{font:900 36px/1 var(--display); grid-row:span 2; text-align:center}
+.trow .tw{grid-column:2 / span 2; font-size:16px; color:var(--muted)}
+.trow .tw .em{font-size:22px}
+.slide{display:flex; align-items:flex-end; gap:0; height:70px; font:900 22px/1 var(--body); color:var(--purple)}
+.slide span{flex:1; border-top:4px solid var(--purple); padding-top:6px}
+.slide span:nth-child(1){margin-bottom:44px} .slide span:nth-child(2){margin-bottom:22px}
+.fam{display:grid; grid-template-columns:72px minmax(0,1fr); gap:10px; align-items:center; border:2px solid var(--line); border-radius:12px; padding:8px 10px}
+.fam .tail{font:900 26px/1 var(--display)}
+.fam span{font:700 clamp(18px,5vw,24px)/1.4 var(--display)}
+.pairc{display:grid; grid-template-columns:76px minmax(0,1fr); gap:12px; align-items:center; border:2px solid var(--line); border-radius:12px; padding:10px}
+.pairc > b{font:900 34px/1 var(--display); text-align:center}
+.pairc p{margin:0}
+.sgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px}
+.sgrid > div{display:flex; flex-direction:column; align-items:center; gap:2px; border:2px solid var(--line); border-radius:12px; padding:10px 6px; background:var(--tint-b)}
+.sgrid b{font:900 28px/1.1 var(--display)}
+.sgrid span{font-weight:900; color:var(--purple)}
+.sgrid small{font:800 12px/1.2 var(--body); color:var(--muted); text-align:center}
+.story{display:grid; gap:10px}
+.story p{font-size:clamp(20px,5.6vw,26px)}
+.story .em{font-size:26px}
+.q .rd + .note{margin-top:-6px}
+.menu-h{margin-top:8px}
+
 @keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .hop{animation:hop .5s ease} .shake{animation:shake .3s ease}
@@ -378,14 +415,153 @@ const VQUIZ = [
   {w:'kite', e:'🪁', r:'кайт', k:'l'}, {w:'fox', e:'🦊', r:'фокс', k:'s'}, {w:'nose', e:'👃', r:'ноуз', k:'l'},
   {w:'sun', e:'☀️', r:'сан', k:'s'}, {w:'cone', e:'🍦', r:'коун', k:'l'}, {w:'fish', e:'🐟', r:'фиш', k:'s'}
 ];
-/* Lesson 9: first blending practice. Keep words short and use only familiar short vowels. */
-const READ_WORDS = [
-  {w:'cat', e:'🐱', r:'кэт', tr:'кошка', sounds:['к','э','т']},
-  {w:'dog', e:'🐶', r:'дог', tr:'собака', sounds:['д','о','г']},
-  {w:'sun', e:'☀️', r:'сан', tr:'солнце', sounds:['с','а','н']},
-  {w:'pen', e:'🖊️', r:'пэн', tr:'ручка', sounds:['п','э','н']},
-  {w:'pig', e:'🐷', r:'пиг', tr:'поросёнок', sounds:['п','и','г']},
-  {w:'map', e:'🗺️', r:'мэп', tr:'карта', sounds:['м','э','п']}
+/* ---------- Reading course (lessons 9–16) ----------
+   The child reads aloud, the adult checks: a "say" step shows a letter / word / sentence, «Проверить» reveals the answer,
+   then the adult marks «Прочитал сам» or «Ещё учим». Letters the child misses are remembered (localStorage) and come back
+   more often in every lesson's warm-up. Sounds are Russian letters in the purple pill, never transcription.
+   Order: letter voices → blending two sounds → word families → mixed words + phrases → letter pairs → sight words → story. */
+const DG = {
+  sh:{v:'ш', w:'fish', e:'🐟', a:'s', b:'h'}, ch:{v:'ч', w:'chip', e:'🍟', a:'c', b:'h'}, th:{v:'з/с', w:'this', e:'👉', a:'t', b:'h'},
+  ck:{v:'к', w:'duck', e:'🦆', a:'c', b:'k'}, ng:{v:'нг', w:'king', e:'🤴', a:'n', b:'g'},
+  ee:{v:'ии', w:'tree', e:'🌳', a:'e', b:'e'}, oo:{v:'уу', w:'moon', e:'🌙', a:'o', b:'o'}, qu:{v:'кв', w:'queen', e:'👑', a:'q', b:'u'}
+};
+const DG_NOTE = {
+  sh:'s + h — не «с-х», а одно шипение «ш», как будто просишь тишины.',
+  ch:'c + h — одно «ч», как в слове «чай».',
+  th:'Кончик языка между зубами — и говорим «з» (this) или «с» (math). Смешной звук, у нас такого нет.',
+  ck:'c и k говорят одно и то же «к». Вместе — всё равно одно «к», просто длиннее записано.',
+  ng:'n + g — «нг», но «г» почти не слышно, звук уходит в нос: king — «кинг».',
+  ee:'Две e рядом говорят длинное «ии», как имя буквы E.',
+  oo:'Две o рядом говорят длинное «уу», как будто удивился: «уууу!»'
+};
+const TRAPS = 'aeiucghjrwy'.split('');
+/* word | picture | how it reads | translation */
+const WB = Object.fromEntries(`
+at||эт|у, в
+it||ит|оно, это
+in||ин|в, внутри
+on||он|на
+up|⬆️|ап|вверх
+us||ас|нас
+if||иф|если
+ox|🐂|окс|бык
+cat|🐱|кэт|кошка
+hat|🎩|хэт|шляпа
+bat|🦇|бэт|летучая мышь
+rat|🐀|рэт|крыса
+mat||мэт|коврик
+map|🗺️|мэп|карта
+man|👨|мэн|мужчина
+can|🥫|кэн|банка
+pan|🍳|пэн|сковородка
+van|🚐|вэн|фургон
+bag|👜|бэг|сумка
+cap|🧢|кэп|кепка
+jam|🍓|джэм|варенье
+dog|🐶|дог|собака
+log|🪵|лог|бревно
+fog|🌫️|фог|туман
+box|📦|бокс|коробка
+fox|🦊|фокс|лиса
+hot|🔥|хот|горячий
+pot|🍲|пот|кастрюля
+mop|🧹|моп|швабра
+pig|🐷|пиг|поросёнок
+big||биг|большой
+dig|⛏️|диг|копать
+wig||уиг|парик
+six|6️⃣|сикс|шесть
+lip|👄|лип|губа
+zip|🤐|зип|молния
+sit|🪑|сит|сидеть
+pin|📌|пин|булавка
+bin|🗑️|бин|мусорное ведро
+kid|🧒|кид|ребёнок
+sun|☀️|сан|солнце
+run|🏃|ран|бежать
+bun|🍞|бан|булочка
+fun|🎉|фан|веселье
+bus|🚌|бас|автобус
+cup|☕|кап|чашка
+bug|🐛|баг|жучок
+nut|🥜|нат|орех
+tub|🛁|таб|ванна
+pen|🖊️|пэн|ручка
+ten|🔟|тэн|десять
+hen|🐔|хэн|курица
+bed|🛏️|бэд|кровать
+red|🔴|рэд|красный
+net|🥅|нэт|сетка
+leg|🦵|лэг|нога
+jet|✈️|джэт|самолёт
+web|🕸️|уэб|паутина
+frog|🐸|фрог|лягушка
+ship|🚢|шип|корабль
+fish|🐟|фиш|рыбка
+shop|🏪|шоп|магазин
+dish|🍽️|диш|тарелка
+wish|🌠|уиш|желание
+cash|💵|кэш|деньги
+chip|🍟|чип|картошка фри
+chop|🪓|чоп|рубить
+rich|🤑|рич|богатый
+lunch|🍱|ланч|обед
+this|👉|зис|это
+that|👈|зэт|то
+with||уиз|с, вместе с
+math|➗|мэс|математика
+duck|🦆|дак|утка
+sock|🧦|сок|носок
+rock|🪨|рок|камень
+clock|🕐|клок|часы
+kick|🦶|кик|пнуть
+neck|🦒|нэк|шея
+king|🤴|кинг|король
+ring|💍|ринг|кольцо
+sing|🎤|синг|петь
+long|📏|лонг|длинный
+song|🎵|сонг|песня
+tree|🌳|трии|дерево
+bee|🐝|бии|пчела
+see|👀|сии|видеть
+feet|🐾|фиит|ноги, ступни
+green|🟢|гриин|зелёный
+sheep|🐑|шиип|овца
+moon|🌙|муун|луна
+zoo|🦁|зуу|зоопарк
+food|🍕|фууд|еда
+spoon|🥄|спуун|ложка
+pool|🏊|пуул|бассейн
+boot|👢|буут|сапог
+`.trim().split('\n').map(row => { const [w, e, r, tr] = row.split('|'); return [w, {w, e, r, tr}]; }));
+const FAMS = ['cat hat bat rat mat', 'can man pan van', 'pig dig big wig', 'sun run bun fun', 'pen ten hen', 'dog log fog', 'hot pot', 'box fox'];
+/* sight words: word, how it reads, meaning */
+const SIGHT = [['the','зэ','этот (слово-указатель)'], ['a','э','один, какой-то'], ['I','ай','я'], ['is','из','есть, является'],
+  ['you','ю','ты'], ['to','ту','к, в'], ['he','хи','он'], ['she','ши','она'], ['we','уи','мы'], ['my','май','мой'], ['no','ноу','нет'], ['go','гоу','идти']];
+const PHRASES = [
+  {s:'a red hat', e:'🔴🎩', r:'э рэд хэт', tr:'красная шляпа'}, {s:'a big pig', e:'🐷', r:'э биг пиг', tr:'большой поросёнок'},
+  {s:'a fox in a box', e:'🦊📦', r:'э фокс ин э бокс', tr:'лиса в коробке'}, {s:'a cat on a mat', e:'🐱', r:'э кэт он э мэт', tr:'кошка на коврике'},
+  {s:'a bug on a rug', e:'🐛', r:'э баг он э раг', tr:'жучок на ковре'}, {s:'a hen in a pen', e:'🐔', r:'э хэн ин э пэн', tr:'курица в загоне'},
+  {s:'ten red pens', e:'🔟🖊️', r:'тэн рэд пэнз', tr:'десять красных ручек'}
+];
+const STORY = [
+  {s:'I see a cat.', e:'👀🐱', r:'Ай сии э кэт.', tr:'Я вижу кошку.'},
+  {s:'The cat is Tosya.', e:'🐱', r:'Зэ кэт из Тося.', tr:'Эта кошка — Тося.'},
+  {s:'Tosya is on a mat.', e:'🐱', r:'Тося из он э мэт.', tr:'Тося сидит на коврике.'},
+  {s:'She is in a red hat.', e:'🎩', r:'Ши из ин э рэд хэт.', tr:'Она в красной шляпе.'},
+  {s:'I see a big dog.', e:'🐶', r:'Ай сии э биг дог.', tr:'Я вижу большую собаку.'},
+  {s:'The dog is my pet.', e:'🐶', r:'Зэ дог из май пэт.', tr:'Собака — мой питомец.'},
+  {s:'The dog can run.', e:'🏃🐶', r:'Зэ дог кэн ран.', tr:'Собака умеет бегать.'},
+  {s:'We sit in the sun.', e:'☀️', r:'Уи сит ин зэ сан.', tr:'Мы сидим на солнышке.'},
+  {s:'We go to the zoo!', e:'🦁', r:'Уи гоу ту зэ зуу!', tr:'Мы идём в зоопарк!'}
+];
+const YESNO = [
+  {e:'🐶', s:'It is a dog.', r:'ит из э дог', tr:'Это собака.', ok:1}, {e:'🐱', s:'It is a pig.', r:'ит из э пиг', tr:'Это поросёнок. А на картинке кошка!', ok:0},
+  {e:'☀️', s:'It is the sun.', r:'ит из зэ сан', tr:'Это солнце.', ok:1}, {e:'🐟', s:'It is a fish.', r:'ит из э фиш', tr:'Это рыбка.', ok:1},
+  {e:'🐝', s:'It is a duck.', r:'ит из э дак', tr:'Это утка. А на картинке пчела!', ok:0}, {e:'🔴', s:'It is red.', r:'ит из рэд', tr:'Это красное.', ok:1},
+  {e:'🟢', s:'It is red.', r:'ит из рэд', tr:'Это красное. А тут зелёное!', ok:0}, {e:'🚌', s:'It is a bus.', r:'ит из э бас', tr:'Это автобус.', ok:1},
+  {e:'🦊', s:'It is a dog.', r:'ит из э дог', tr:'Это собака. А на картинке лиса!', ok:0}, {e:'🌙', s:'It is the moon.', r:'ит из зэ муун', tr:'Это луна.', ok:1},
+  {e:'🐔', s:'It is a hen.', r:'ит из э хэн', tr:'Это курица.', ok:1}, {e:'🦆', s:'It is a sheep.', r:'ит из э шиип', tr:'Это овца. А на картинке утка!', ok:0}
 ];
 
 const DAYS = [
@@ -405,8 +581,30 @@ const DAYS = [
    intro:'Ты знаешь все двадцать шесть букв! Теперь выстроим их по порядку. В алфавите у каждой буквы своё место, как у ребят в строю на физкультуре.'},
   {title:'Почему A говорит «эй»?', kind:'vowels', letters:'',
    intro:'Помнишь букву «Эй»? Зовут её «эй», а в словах она обычно говорит «э». Но иногда она всё-таки говорит своё имя. Сегодня узнаем когда. Это секрет гласных букв.'},
-  {title:'Складываем буквы в слова', kind:'reading', letters:'',
-   intro:'Сегодня будем читать первые настоящие слова. Буквы в слове не называют себя. Каждая говорит свой короткий звук, а потом мы складываем звуки вместе: к — э — т, получается «кэт».'}
+  {id:'voices', kind:'read', letters:'', title:'Голоса букв', sub:'a → «э» · c → «к» · g → «г»',
+   intro:'Ты знаешь все буквы и их имена. Но в словах буквы не называют себя, а говорят. Сегодня вспомним голос каждой буквы. Это самое главное для чтения! Этот урок можно повторять каждый день.',
+   paper:'напиши строчкой буквы-хитрюги <b class="en">a e i u c g h j r w y</b> и над каждой скажи вслух её голос.'},
+  {id:'slide', kind:'read', letters:'', title:'Горка: соединяем звуки', sub:'at · in · on · up',
+   intro:'Сегодня научимся соединять звуки. Это как съезжать с горки: сел наверху и едешь без остановки до самого низа. Звуки тоже едут друг за другом и не останавливаются.',
+   paper:'напиши <b class="en">at, in, on, up, sun</b> и прочитай каждое, ведя пальцем, как с горки.'},
+  {id:'families', kind:'read', letters:'', title:'Семьи слов', sub:'cat · hat · bat · rat',
+   intro:'У слов тоже бывают семьи! Хвостик у них одинаковый, а голова разная. Прочитал хвостик один раз — и дальше меняешь только первую букву.',
+   paper:'нарисуй лесенку: <b class="en">at → cat → hat → bat → rat</b>. Меняй только первую букву и читай вслух.'},
+  {id:'mix', kind:'read', letters:'', title:'Слова вперемешку и фразы', sub:'a red hat',
+   intro:'Сегодня читаем слова вперемешку, без семей, каждое по-новому. А потом целые фразы из трёх-четырёх слов. Например, «лиса в коробке».',
+   paper:'напиши <b class="en">a red hat</b> или <b class="en">a fox in a box</b> и нарисуй картинку.'},
+  {id:'pairs1', kind:'read', letters:'', title:'Двойняшки: sh, ch, th', sub:'sh · ch · th',
+   intro:'Иногда две буквы стоят рядом и говорят один звук вместе. Я называю их двойняшки. S и H вместе говорят «ш». Сегодня три пары двойняшек.',
+   paper:'напиши <b class="en">fish, ship, chip, this</b> и обведи двойняшек кружком.'},
+  {id:'pairs2', kind:'read', letters:'', title:'Ещё двойняшки', sub:'ck · ng · ee · oo',
+   intro:'Ещё четыре пары двойняшек. Две пары из одинаковых букв: ee и oo. Они тянут длинный звук.',
+   paper:'напиши <b class="en">duck, king, tree, moon</b> и обведи двойняшек кружком.'},
+  {id:'sight', kind:'read', letters:'', title:'Слова-хулиганы', sub:'the · I · is · you · my',
+   intro:'Есть слова-хулиганы. Они не слушаются правил, и по звукам их не прочитать. Зато их немного, и они встречаются везде. Их запоминают в лицо, как друзей в классе.',
+   paper:'напишите вместе на карточках <b class="en">the, is, you, my, she</b>. Повесьте на холодильник и читайте мимоходом.'},
+  {id:'story', kind:'read', letters:'', title:'История про Тосю', sub:'I see a cat.',
+   intro:'Ты готов читать настоящую историю! Она про меня и про одну большую собаку. Читай по одной строчке.',
+   paper:'перепиши любимую строчку из истории и нарисуй к ней картинку.'}
 ];
 
 /* Lesson 1: before the letters = map + teams; after the letters = the secret (name vs what it says in words).
@@ -421,7 +619,7 @@ const CONCEPTS = [
 ];
 
 const LINES = {
-  hello:'Привет, Ярослав! Я Тося. Давай выучим английский алфавит. Каждый день один короткий урок. Начинай с урока, который горит жёлтым.',
+  hello:'Привет, Ярослав! Алфавит ты уже знаешь. Теперь учимся читать по-английски! Каждый день один короткий урок. Начинай с урока, который горит жёлтым.',
   q_name:'Прочитай, как зовут букву, и найди её.',
   q_word:'Посмотри на картинку и прочитай слово. С какой буквы оно начинается?',
   q_count:'Мини-игра! Сколько букв в английском алфавите?',
@@ -437,7 +635,32 @@ const LINES = {
   alpha:'Ты знаешь все буквы! Назови каждую по порядку, ведя пальчиком. Подсказка серым под буквой. Закрой её пальцем и проверь себя.',
   vowels:'Вот пять гласных букв. У каждой два голоса. Короткий голос, как в словах «кэт» и «дог». И длинный голос. Он звучит так же, как имя буквы.',
   magic:'А вот и секрет! Посмотри на слова с буквой «И» на конце, той, что пишется как E. Эта буква молчит, её не слышно. Но она волшебная: заставляет гласную сказать своё имя. Было «кит», стало «кайт». Было «пин», стало «пайн».',
-  reading:'Читаем по частям. Сначала показываем пальцем на каждую букву и произносим её короткий голос: к — э — т. Не делаем большие паузы, а быстро соединяем звуки. К — Э — Т… «кэт»! Так буквы превращаются в слово.',
+  ri_voices:'Вот все буквы и их голоса. Показывай пальцем на букву и говори её голос. Не имя, а голос! Розовые буквы — хитрюги: у них имя совсем не похоже на голос.',
+  ri_traps:'Вот они, хитрюги. Имя у них одно, а голос другой. Скажем вместе: «эй» говорит «э», «си» говорит «к». Картинка поможет вспомнить голос.',
+  ri_slide:'Смотри. Ставим палец под первую букву и тянем её звук: «ммм». Палец едет вниз, и мы, не останавливаясь, говорим следующий звук: «ммм-эээ-ннн». А теперь быстро: «мэн»! Это слово «мужчина».',
+  ri_families:'Вот семьи слов. Хвостик у всех одинаковый. Прочитай хвостик, а потом приставляй к нему разные головы.',
+  ri_phrases:'Буква «a» иногда стоит одна, сама по себе. Тогда она говорит коротко «э» и значит «один, какой-то». a cat — «э кэт», одна кошка.',
+  ri_pairs:'Вот двойняшки. Когда видишь их рядом, не читай по одной букве. Они говорят один звук вместе. В словах я покрашу их жёлтым.',
+  ri_sight:'Вот хулиганы. Прочитай, как каждый говорит, и запомни, как он выглядит. Подсказка: многие хулиганы говорят имя своей гласной: he — «хи», go — «гоу», my — «май».',
+  ri_story:'Это история «Тося и собака». Читай по строчке. Если застрял: хулиганов вспоминаем в лицо, остальное читаем по звукам.',
+  ri_storyall:'Ты прочитал всю историю по кусочкам! А теперь прочитай её целиком, от начала до конца. Это уже настоящее чтение!',
+  say_warm:'Разминка! Посмотри на букву и скажи, что она говорит в словах. Не имя, а голос!',
+  say_two:'Съезжаем с горки! Веди пальчиком и соединяй звуки без остановки.',
+  say_word:'Прочитай слово сам, ведя пальчиком. Трудно? Нажми «По звукам».',
+  say_family:'Читаем семью! Хвостик тот же, меняется только первая буква.',
+  say_phrase:'Прочитай фразу. Сначала каждое слово, а потом всю фразу целиком.',
+  say_dg:'Что говорят двойняшки? А одна буква?',
+  say_dgword:'Найди жёлтых двойняшек и прочитай слово.',
+  say_sight:'Это хулиган. Не читай по буквам: вспомни, как он говорит.',
+  say_story:'Прочитай строчку. Потом проверим и посмотрим картинку.',
+  q_lsound:'Что эта буква говорит в словах? Осторожно: среди ответов спряталось её имя!',
+  q_pic:'Прочитай слово вслух. Какая это картинка? Все эти слова были сегодня.',
+  q_gap:'Скажи слово медленно. Какой первый звук? Найди его букву.',
+  q_sread:'Как говорит этот хулиган?',
+  q_yesno:'Прочитай и посмотри на картинку. Это правда?',
+  rd_3:'Ура, ты читаешь по-английски! Завтра — следующий урок.',
+  rd_2:'Хорошо читаешь! Буквы внизу пока путаются. Не страшно: в разминке они придут снова.',
+  rd_1:'Читать трудно, и это нормально. Пройдём урок ещё раз завтра, будет легче.',
   res_3:'Ура! Все буквы урока теперь твои. Возьми листок и напиши каждую букву три раза, большую и маленькую.',
   res_2:'Хорошая работа! Нажми на буквы, где была ошибка, и послушай их ещё раз. А потом напиши каждую букву на листке.',
   res_1:'Буквы хитрые, это нормально. Давай пройдём урок ещё раз, завтра будет легче.'
@@ -494,7 +717,7 @@ function spoken(){
 /* ---------- progress (per-viewer convenience; the page works without it) ---------- */
 const KEY = 'tosya-abc-v1';
 function loadStars(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
-function saveStars(d, n){ try { const s = loadStars(); s[d] = Math.max(s[d] || 0, n); localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+function saveStars(d, n){ if (typeof d === 'number' && DAYS[d] && DAYS[d].id) d = DAYS[d].id; try { const s = loadStars(); s[d] = Math.max(s[d] || 0, n); localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
 
 /* ---------- helpers ---------- */
 const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
@@ -520,9 +743,8 @@ function buildPlan(d){
     const vmini = shuffle(VOW.flatMap(v => [{...v.s, k:'s'}, {...v.l, k:'l'}])).slice(0, 4).map(it => ({kind:'vowel', right:it.k, it, opts:['l', 's']}));
     plan.push({t:'vowels'}, {t:'quiz', mini:true, qs:vmini}, {t:'magic'});
     plan.push({t:'quiz', qs:shuffle(VQUIZ).slice(0, 10).map(q => ({kind:'vowel', right:q.k, it:q, opts:['l', 's']}))});
-  } else if (day.kind === 'reading') {
-    plan.push({t:'reading'});
-    plan.push({t:'quiz', qs:shuffle(READ_WORDS).map(it => ({kind:'read', it:{w:it.w.toUpperCase(), ok:it.r, bad:it.w.split('').map(l => LT[l.toUpperCase()]?.n || l).join('-'), tr:it.tr}, right:'ok', opts:shuffle(['ok', 'bad'])}))});
+  } else if (day.kind === 'read') {
+    plan.push(...RPLAN[day.id]());
   } else {
     const today = day.letters.split(''), pool = learned(d);
     const earlier = shuffle(pool.filter(l => !today.includes(l))).slice(0, 2);
@@ -549,7 +771,7 @@ const MINI = {
                 {kind:'read', it:{w:'MOM', ok:'мом', bad:'эм-оу-эм', tr:'мама'}, right:'ok', opts:shuffle(['ok', 'bad'])}]
 };
 const TEAM_LABEL = {friend:'Друг', trick:'Обманщик', new:'Переодетая'};
-const TEXT_KINDS = ['vowel', 'team', 'callname', 'sound', 'read', 'count'];
+const TEXT_KINDS = ['vowel', 'team', 'callname', 'sound', 'read', 'count', 'lsound', 'sread', 'yesno'];
 let S = {d:-1, plan:null, k:0, q:0, wrong:[], solved:false, score:0, total:0, missed:[], fx:''};
 const app = document.getElementById('app');
 const nav = document.getElementById('nav');
@@ -603,24 +825,39 @@ const SONG_LINK = 'https://www.youtube.com/results?search_query=ABC+song+for+kid
 /* ---------- screens ---------- */
 function menu(){
   const st = loadStars();
-  const now = DAYS.findIndex((_, i) => !st[i]);
-  const list = DAYS.map((d, i) => `<button class="day ${st[i] ? 'done' : ''} ${i === now ? 'now' : ''}" data-act="day" data-d="${i}">
+  const sk = (d, i) => d.id || i;
+  const now = DAYS.findIndex((d, i) => !st[sk(d, i)]);
+  const item = (d, i) => { const v = st[sk(d, i)];
+    return `<button class="day ${v ? 'done' : ''} ${i === now ? 'now' : ''}" data-act="day" data-d="${i}">
       <span class="n">${i + 1}</span>
-      <span class="t"><b>${d.title}</b><span>${d.letters ? d.letters.split('').join(' ') : (d.kind === 'order' ? 'A → Z' : 'A E I O U')}</span></span>
-      <span class="s" aria-label="${st[i] || 0} из 3">${st[i] ? stars(st[i]) : ''}</span></button>`).join('');
+      <span class="t"><b>${d.title}</b><span>${d.sub || (d.letters ? d.letters.split('').join(' ') : (d.kind === 'order' ? 'A → Z' : 'A E I O U'))}</span></span>
+      <span class="s" aria-label="${v || 0} из 3">${v ? stars(v) : ''}</span></button>`; };
+  const abcN = DAYS.findIndex(d => d.kind === 'read');
   return `${stage('happy', LINES.hello)}
-    <h1>Английский алфавит</h1>
-    <div class="days">${list}</div>
+    <h1>Учимся читать</h1>
+    <div class="days">${DAYS.map((d, i) => i >= abcN ? item(d, i) : '').join('')}</div>
+    <div class="panel tb">
+      <h2>Как читать с ребёнком</h2>
+      <ul>
+        <li><b>Каждый урок начинается с разминки:</b> буква на экране, ребёнок говорит её голос (не имя!). Вы нажимаете «Проверить» и отмечаете «Прочитал сам» или «Ещё учим». Буквы, где он ошибся, приложение запоминает и показывает в разминке чаще.</li>
+        <li><b>Ребёнок читает сам, вслух.</b> Подсказка «По звукам» раскладывает слово на звуки. Ответ и перевод открываются только после попытки.</li>
+        <li>Порядок: голоса букв → «горка» (соединяем два звука) → семьи слов → слова вперемешку и фразы → двойняшки (sh = ш) → слова-хулиганы (the, you) → история.</li>
+        <li><b>Один урок в день, 10–15 минут.</b> Меньше двух звёзд — повторите урок завтра. Урок 9 «Голоса букв» полезно проходить снова, когда буквы путаются.</li>
+        <li>Звуки к согласным не прилипают: не «бэ-а-тэ», а «б-э-т». Сначала медленно по звукам, потом быстро, одним духом.</li>
+      </ul>
+    </div>
+    <h2 class="menu-h">Английский алфавит</h2>
+    <div class="days">${DAYS.map((d, i) => i < abcN ? item(d, i) : '').join('')}</div>
     <div class="panel tb">
       <h2>Для взрослого</h2>
       <ul>
         <li><b>Текст в облачке Тоси читаете вы</b>, вслух, от лица Тоси. Под ним картинки и примеры: показывайте пальцем.</li>
-        <li><b>9 уроков, по одному в день</b>, 10–15 минут. Урок можно проходить сколько угодно раз.</li>
+        <li><b>8 уроков алфавита, по одному в день</b>, 10–15 минут. Урок можно проходить сколько угодно раз.</li>
         <li>Каждый урок: новые буквы → примеры → <b>песенка алфавита целиком</b> (порядок учится повторением каждый день) → игры.</li>
         <li>Главная идея: у буквы есть <b>имя</b> (как её называют в алфавите) и <b>голос</b> (как она звучит в словах). Отсюда вся путаница «B — это би или б?».</li>
         <li>Буквы идут не по алфавиту, а по сходству с русскими: <b>друзья</b> (выглядят и звучат как наши), <b>обманщики</b> (похожи, но звучат иначе), <b>переодетые</b> (наши буквы в другом костюме: D = Д, L = Л, Z = З). Весь алфавит по порядку виден с первого экрана и поётся в каждом уроке, а в уроке 7 закрепляется.</li>
         <li><b>Транскрипцию не используем</b>, ни слово, ни скобки. Что буква «говорит» в словах — фиолетовая плашка. Когда в школе дойдут до значков, скажите: «это та же плашка, только значками».</li>
-        <li>После урока — на бумаге: в уроках с буквами каждую букву дня 3 раза, большую и маленькую, называя имя вслух. После урока 9 можно написать и прочитать слова <b>cat, dog, sun</b>.</li>
+        <li>После урока — на бумаге: в уроках с буквами каждую букву дня 3 раза, большую и маленькую, называя имя вслух.</li>
         <li>Имена букв британские, как в школьных учебниках: Z — «зед», R — «а».</li>
       </ul>
     </div>`;
@@ -741,23 +978,149 @@ function magicScreen(){
     <div class="row"><button class="go" data-act="next">К заданиям</button></div>`;
 }
 
-function readingScreen(){
-  const first = READ_WORDS[0];
-  const blend = first.sounds.map((sound, i) => `<div class="ch"><b class="en">${first.w[i]}</b>${vc(sound)}</div>`).join('<span class="eq">+</span>');
-  const rows = READ_WORDS.slice(1).map(x => `<div class="word static"><span class="em" aria-hidden="true">${x.e}</span><span class="txt"><b class="en">${x.w}</b><span>«${x.r}» · ${x.tr}</span></span></div>`).join('');
-  return `${stage('happy', LINES.reading)}
+/* ---------- reading course: helpers, plans, screens ---------- */
+const WKEY = 'tosya-abc-weak';
+function loadWeak(){ try { return JSON.parse(localStorage.getItem(WKEY)) || {}; } catch (e) { return {}; } }
+function weakAdd(l, dx){ try { const w = loadWeak(); w[l] = Math.max(0, Math.min(6, (w[l] || 0) + dx)); localStorage.setItem(WKEY, JSON.stringify(w)); } catch (e) {} }
+/* warm-up letters: the ones the child missed before come first, then the tricky ones, then random */
+function warmLetters(n){
+  const w = loadWeak();
+  const weak = ABC.filter(l => w[l] > 0).sort((a, b) => w[b] - w[a]).slice(0, Math.ceil(n / 2));
+  const traps = shuffle(TRAPS.map(x => x.toUpperCase()).filter(l => !weak.includes(l)));
+  const rest = shuffle(ABC.filter(l => !weak.includes(l) && !traps.includes(l)));
+  const k = Math.ceil((n - weak.length) / 2);
+  return shuffle([...weak, ...traps.slice(0, k), ...rest].slice(0, n));
+}
+const graphemes = w => { const out = []; for (let i = 0; i < w.length;) { const two = w.slice(i, i + 2); if (DG[two]) { out.push(two); i += 2; } else { out.push(w[i]); i++; } } return out; };
+const gsound = g => DG[g] ? DG[g].v : (LT[g.toUpperCase()] || {}).v || g;
+const anchor = L => `<span class="em" aria-hidden="true">${LT[L].e}</span> <b class="en">${hl(LT[L].w, L)}</b> «${LT[L].r}»`;
+const spellRow = w => graphemes(w).map(g => `<div class="ch"><b class="en">${g}</b>${vc(gsound(g))}</div>`).join('<span class="eq">+</span>');
+const pickW = (a, n) => shuffle(a).slice(0, n);
+const hasPic = w => WB[w] && WB[w].e;
+const CVC = Object.keys(WB).filter(w => w.length === 3 && graphemes(w).length === 3);
+const SHW = ['fish', 'ship', 'shop', 'dish', 'wish', 'cash', 'chip', 'chop', 'rich', 'lunch', 'this', 'that', 'with', 'math'];
+const P2W = ['duck', 'sock', 'rock', 'clock', 'kick', 'neck', 'king', 'ring', 'sing', 'long', 'song', 'tree', 'bee', 'see', 'feet', 'green', 'sheep', 'moon', 'zoo', 'food', 'spoon', 'pool', 'boot'];
+
+/* read-aloud items: show → (hint) → answer, the adult marks */
+const letterItem = L => ({l:L, show:`<span class="bigl en">${L.toLowerCase()}</span><span class="note en">${L} ${L.toLowerCase()}</span>`,
+  ans:`<p>Зовут «${LT[L].n}», а говорит ${vc(LT[L].v)}</p><p>${anchor(L)}</p>`});
+const wordItem = (w, o = {}) => { const x = WB[w];
+  const shown = o.tail ? `${w[0]}<mark>${w.slice(1)}</mark>` : o.dg ? graphemes(w).map(g => DG[g] ? `<mark>${g}</mark>` : g).join('') : w;
+  return {show:`<b class="rd en">${shown}</b>`, hint:spellRow(w), ans:`<p>${x.e ? `<span class="em" aria-hidden="true">${x.e}</span> ` : ''}<b>«${x.r}»</b> · ${x.tr}</p>`}; };
+const phraseItem = p => ({show:`<b class="rd en long">${p.s}</b>`, ans:`<p><span class="em" aria-hidden="true">${p.e}</span></p><p><b>«${p.r}»</b></p><p>${p.tr}</p>`});
+const sightItem = s => ({show:`<b class="rd en">${s[0]}</b>`, ans:`<p><b>«${s[1]}»</b> · ${s[2]}</p>`});
+const dgItem = k => ({show:`<b class="rd en"><mark>${k}</mark></b><span class="note en">${DG[k].a} + ${DG[k].b}</span>`,
+  ans:`<p>Вместе говорят ${vc(DG[k].v)}</p><p><span class="em" aria-hidden="true">${DG[k].e}</span> <b class="en">${DG[k].w}</b> «${WB[DG[k].w] ? WB[DG[k].w].r : 'квиин'}»</p>`});
+const sayStep = (line, qs, mini) => ({t:'say', line, qs, mini});
+const warm = n => sayStep('say_warm', warmLetters(n).map(letterItem), true);
+
+/* tap-the-answer games */
+const lsQ = L => ({kind:'lsound', l:L, right:LT[L].v,
+  opts:shuffle([...new Set([LT[L].v, LT[L].n, ...shuffle(ABC.map(x => LT[x].v))])].slice(0, 4))});
+const fixLs = q => { q.opts = shuffle([...new Set([q.right, LT[q.l].n, ...q.opts])].slice(0, 4)); return q; };
+const picQuiz = (ws, n) => { const pool = ws.filter(hasPic);
+  return {t:'quiz', qs:pickW(pool, n).map(w => ({kind:'pic', w, right:WB[w].e, opts:options(WB[w].e, pool.map(x => WB[x].e))}))}; };
+const gapQ = w => ({kind:'gap', w, l:w[0].toUpperCase(), right:w[0], opts:options(w[0], 'bcdfhjklmnprstvwz'.split(''))});
+const sreadQ = s => ({kind:'sread', w:s[0], tr:s[2], right:s[1], opts:options(s[1], SIGHT.map(x => x[1]))});
+const ynQ = y => ({kind:'yesno', it:y, right:y.ok ? 'y' : 'n', opts:['y', 'n']});
+
+const RPLAN = {
+  voices:() => [{t:'rinfo', key:'voices'},
+    {t:'quiz', mini:true, qs:pickW(ABC.filter(l => !TRAPS.includes(l.toLowerCase())), 4).map(L => fixLs(lsQ(L)))},
+    {t:'rinfo', key:'traps'},
+    {t:'quiz', qs:pickW(TRAPS, 8).map(l => fixLs(lsQ(l.toUpperCase())))},
+    warm(8)],
+  slide:() => [warm(6), {t:'rinfo', key:'slide'},
+    sayStep('say_two', shuffle(['at', 'in', 'on', 'up', 'it', 'us', 'if', 'ox']).map(w => wordItem(w))),
+    sayStep('say_word', shuffle(['sun', 'man', 'map', 'mop', 'run', 'sit']).map(w => wordItem(w))),
+    picQuiz(['sun', 'man', 'map', 'mop', 'run', 'up', 'ox', 'sit'], 4)],
+  families:() => { const fams = [FAMS[0], ...pickW(FAMS.slice(1), 2)], ws = fams.flatMap(f => f.split(' '));
+    return [warm(6), {t:'rinfo', key:'families', fams}, sayStep('say_family', ws.map(w => wordItem(w, {tail:1}))),
+      {t:'quiz', qs:pickW(ws.filter(hasPic), 5).map(gapQ)}, picQuiz(ws, 4)]; },
+  mix:() => { const ws = pickW(CVC, 10);
+    return [warm(6), sayStep('say_word', ws.map(w => wordItem(w))), {t:'rinfo', key:'phrases'},
+      sayStep('say_phrase', pickW(PHRASES, 4).map(phraseItem)), {t:'quiz', qs:pickW(CVC.filter(hasPic).filter(w => !ws.includes(w)), 5).map(gapQ)}]; },
+  pairs1:() => [warm(5), {t:'rinfo', key:'pairs', keys:['sh', 'ch', 'th']},
+    sayStep('say_dg', shuffle([dgItem('sh'), letterItem('S'), dgItem('ch'), letterItem('C'), dgItem('th'), letterItem('T')])),
+    sayStep('say_dgword', pickW(SHW, 10).map(w => wordItem(w, {dg:1}))), picQuiz(SHW, 5)],
+  pairs2:() => [warm(5), {t:'rinfo', key:'pairs', keys:['ck', 'ng', 'ee', 'oo']},
+    sayStep('say_dg', shuffle([dgItem('ck'), dgItem('ng'), dgItem('ee'), letterItem('E'), dgItem('oo'), letterItem('O')])),
+    sayStep('say_dgword', shuffle([...pickW(P2W, 9), ...pickW(SHW, 2)]).map(w => wordItem(w, {dg:1}))), picQuiz(P2W, 5)],
+  sight:() => [warm(5), {t:'rinfo', key:'sight'}, {t:'quiz', qs:pickW(SIGHT, 8).map(sreadQ)},
+    sayStep('say_sight', shuffle(SIGHT).map(sightItem)), {t:'quiz', qs:pickW(YESNO, 5).map(ynQ)}],
+  story:() => [warm(4), sayStep('say_story', STORY.map(phraseItem)), {t:'rinfo', key:'storyall'}, {t:'quiz', qs:pickW(YESNO, 5).map(ynQ)}]
+};
+
+function rinfoScreen(st){
+  const body = {
+    voices:() => `<h2>Голоса всех букв</h2>
+      <div class="vgrid">${ABC.map(L => `<div class="${TRAPS.includes(L.toLowerCase()) ? 'trap' : ''}"><b class="en">${L.toLowerCase()}</b>${vc(LT[L].v)}</div>`).join('')}</div>
+      <p class="note">Розовые — <b>хитрюги</b>: имя у них совсем не похоже на голос. Гласные a e i o u здесь с коротким голосом, как в словах cat, pen, pig, dog, sun.</p>`,
+    traps:() => `<h2>Буквы-хитрюги</h2>
+      <div class="trows">${TRAPS.map(l => { const L = l.toUpperCase();
+        return `<div class="trow"><b class="en">${l}</b><span>зовут «${LT[L].n}»</span><span>говорит ${vc(LT[L].v)}</span><span class="tw">${anchor(L)}</span></div>`; }).join('')}</div>
+      <p class="note">Если ребёнок застрял на букве, спросите: «Какая у неё картинка?» Картинка подскажет голос.</p>`,
+    slide:() => `<h2>Съезжаем с горки</h2>
+      <div class="spell">${spellRow('man')}<span class="eq">→</span><div class="ch"><b>мэн</b><span>👨</span></div></div>
+      <div class="slide"><span>ммм</span><span>эээ</span><span>н</span></div>
+      <p class="note">Палец под буквами едет слева направо, звук не прерывается: <b>«ммм-эээн… мэн!»</b></p>
+      <p class="note"><b>Для взрослого:</b> следите, чтобы к звукам не прилипала гласная. Не «бэ-а-тэ», а «б-э-т». Звуки м, с, ф, н, л можно тянуть, начинайте с них. Сначала читаем по звукам, потом то же слово быстро, одним духом.</p>`,
+    families:() => `<h2>Семьи слов</h2>
+      ${st.fams.map(f => { const ws = f.split(' '); return `<div class="fam"><b class="en tail"><mark>${ws[0].slice(1)}</mark></b><span class="en">${ws.map(w => `${w[0]}<mark>${w.slice(1)}</mark>`).join(' · ')}</span></div>`; }).join('')}
+      <p class="note">Сначала читаем хвостик: <b class="en">at</b> — «эт». Потом голова + хвостик: «к» + «эт» = <b>«кэт»</b>.</p>`,
+    phrases:() => `<h2>Маленькое слово «a»</h2>
+      <div class="spell"><div class="ch"><b class="en">a</b><span>э</span></div><div class="ch"><b class="en">cat</b><span>кэт</span></div><span class="eq">=</span><div class="ch"><b>э кэт</b><span>🐱</span></div></div>
+      <p class="note">Когда <b class="en">a</b> стоит одна, она говорит коротко «э» и значит «одна, какая-то». На русский её не переводим: <b class="en">a cat</b> — просто «кошка».</p>`,
+    pairs:() => `<h2>Двойняшки</h2>
+      ${st.keys.map(k => `<div class="pairc"><b class="en"><mark>${k}</mark></b><div><p>${vc(DG[k].v)} <span class="em" aria-hidden="true">${DG[k].e}</span> <b class="en">${DG[k].w.replace(k, `<mark>${k}</mark>`)}</b> «${WB[DG[k].w].r}»</p><p class="note">${DG_NOTE[k]}</p></div></div>`).join('')}`,
+    sight:() => `<h2>Слова-хулиганы</h2>
+      <div class="sgrid">${SIGHT.map(s => `<div><b class="en">${s[0]}</b><span>«${s[1]}»</span><small>${s[2]}</small></div>`).join('')}</div>
+      <p class="note">Их не читают по звукам, а узнают с первого взгляда. Можно сделать карточки и читать их каждый день, по 5 штук.</p>`,
+    storyall:() => `<h2>Тося и собака</h2>
+      <div class="story">${STORY.map(s => `<p><span class="em" aria-hidden="true">${s.e}</span> <b class="en">${s.s}</b></p>`).join('')}</div>`
+  }[st.key]();
+  return `${stage('tell', LINES['ri_' + st.key])}<div class="card">${body}</div>
+    <div class="row"><button class="go" data-act="next">Дальше</button></div>`;
+}
+
+function sayScreen(st){
+  const it = st.qs[S.q], n = st.qs.length, hint = (S.hints || {})[S.k + '-' + S.q];
+  const ctl = !S.solved
+    ? `<div class="row">${it.hint && !hint ? '<button class="go ghost" data-act="hint">По звукам</button>' : ''}<button class="go" data-act="reveal">Проверить</button></div>
+       <p class="note">Ребёнок читает вслух, потом нажмите «Проверить».</p>`
+    : `<div class="ans">${it.ans}</div>
+       <div class="opts two"><button class="opt" data-act="mark" data-o="ok">✓ Прочитал сам</button><button class="opt" data-act="mark" data-o="no">↻ Ещё учим</button></div>
+       <p class="note">«Сам» — если прочитал до того, как увидел ответ. Ошибся — повторите вместе и идите дальше.</p>`;
+  return `${stage(S.solved ? 'happy' : 'ask', LINES[st.line])}
     <div class="card">
-      <h2>Соединяем звуки</h2>
-      <div class="spell">${blend}<span class="eq">→</span><div class="ch"><b>${first.r}</b><span>${first.e}</span></div></div>
-      <p class="note">Произнеси звуки слитно, почти без пауз: <b>к—э—т… кэт!</b> Буквы складываются, как кубики.</p>
+      <span class="count">${st.mini ? 'РАЗМИНКА · ' : ''}${S.q + 1} ИЗ ${n}</span>
+      <div class="q">${it.show}${hint ? `<div class="spell">${it.hint}</div>` : ''}</div>
+      ${ctl}
+    </div>`;
+}
+
+function readResult(){
+  const ratio = S.total ? S.score / S.total : 0;
+  const n = ratio >= 0.85 ? 3 : ratio >= 0.6 ? 2 : 1, day = DAYS[S.d];
+  saveStars(day.id, n);
+  const missed = [...new Set(S.missed)].filter(l => LT[l]);
+  if (!S.weakSaved) { S.weakSaved = 1; missed.forEach(l => weakAdd(l, 2)); }
+  return `${stage(n === 3 ? 'happy' : 'tell', LINES['rd_' + n])}
+    <div class="card">
+      <div class="stars" aria-label="${n} из 3">${stars(n)}</div>
+      <div class="score">${S.score} из ${S.total}</div>
+      <p class="note">прочитано сам или угадано с первой попытки</p>
+      ${missed.length ? `<p class="note">Эти буквы путались. Они придут снова в разминке:</p>
+        <div class="vgrid">${missed.map(l => `<div class="trap"><b class="en">${l.toLowerCase()}</b>${vc(LT[l].v)}</div>`).join('')}</div>` : ''}
     </div>
-    <div class="card"><h2>Попробуй прочитать</h2>${rows}</div>
-    <div class="row"><button class="go" data-act="next">К игре</button></div>`;
+    <div class="panel tb"><p><b>На листке:</b> ${day.paper}</p></div>
+    <div class="row"><button class="go" data-act="home">К урокам</button><button class="go ghost" data-act="again">Пройти ещё раз</button></div>`;
 }
 
 function quizScreen(st){
   const q = st.qs[S.q], n = st.qs.length;
-  const prompt = {count:LINES.q_count, team:LINES.q_team, callname:LINES.q_callname, sound:LINES.q_sound, read:LINES.q_read, name:LINES.q_name, word:LINES.q_word, case:LINES.q_case, missing:LINES.q_missing, vowel:st.mini ? LINES.q_vowel_mini : LINES.q_vowel}[q.kind];
+  const prompt = {count:LINES.q_count, team:LINES.q_team, callname:LINES.q_callname, sound:LINES.q_sound, read:LINES.q_read, name:LINES.q_name, word:LINES.q_word, case:LINES.q_case, missing:LINES.q_missing, vowel:st.mini ? LINES.q_vowel_mini : LINES.q_vowel,
+    lsound:LINES.q_lsound, pic:LINES.q_pic, gap:LINES.q_gap, sread:LINES.q_sread, yesno:LINES.q_yesno}[q.kind];
   let show = '';
   if (q.kind === 'name') show = `<span class="ask">Найди букву<br><b>«${LT[q.right].n}»</b></span>`;
   if (q.kind === 'word') show = `<span class="em" aria-hidden="true">${LT[q.right].e}</span>
@@ -767,11 +1130,16 @@ function quizScreen(st){
   if (q.kind === 'read') show = `<b class="en" style="font-size:52px">${q.it.w}</b><span class="ask">${S.solved ? q.it.tr : '&nbsp;'}</span>`;
   if (q.kind === 'case') show = `<span class="bigl en">${q.right.toLowerCase()}</span>`;
   if (q.kind === 'missing') show = `<div class="seq en">${q.seq.map(l => l === q.right && !S.solved ? '<span class="gap">?</span>' : `<span>${l}</span>`).join('')}</div>`;
+  if (q.kind === 'lsound') show = `<span class="bigl en">${q.l.toLowerCase()}</span>`;
+  if (q.kind === 'pic') show = `<b class="rd en">${q.w}</b>`;
+  if (q.kind === 'gap') show = `<span class="em" aria-hidden="true">${WB[q.w].e}</span><b class="rd en">${S.solved ? `<mark>${q.w[0]}</mark>` : '<mark>?</mark>'}${q.w.slice(1)}</b>`;
+  if (q.kind === 'sread') show = `<b class="rd en">${q.w}</b>`;
+  if (q.kind === 'yesno') show = `<span class="em" aria-hidden="true">${q.it.e}</span><b class="rd en long">${q.it.s}</b>`;
   if (q.kind === 'vowel') show = `<span class="em" aria-hidden="true">${q.it.e}</span><b class="en" style="font-size:44px">${magicE(q.it.w)}</b>`;
   const label = o => ({
     vowel:() => o === 'l' ? 'Говорит имя' : 'Короткий голос',
     team:() => TEAM_LABEL[o], callname:() => `«${LT[o].n}»`, sound:() => `«${o}»`,
-    read:() => `«${q.it[o]}»`
+    read:() => `«${q.it[o]}»`, lsound:() => `«${o}»`, sread:() => `«${o}»`, yesno:() => o === 'y' ? 'Да, правда' : 'Нет, неправда'
   }[q.kind] || (() => o))();
   const text = TEXT_KINDS.includes(q.kind);
   const opts = q.opts.map(o => {
@@ -793,6 +1161,11 @@ function quizScreen(st){
       word:() => `<b class="en">${x && hl(x.w.toUpperCase(), q.right)}</b> — «${x && x.r}». Первая буква <b class="en">${q.right}</b>, она говорит «${x && x.v}».`,
       case:() => `<b class="en">${q.right.toLowerCase()}</b> и <b class="en">${q.right}</b> — одна буква, «${x && x.n}».`,
       missing:() => `Между <b class="en">${ABC[ABC.indexOf(q.right) - 1]}</b> и <b class="en">${ABC[ABC.indexOf(q.right) + 1]}</b> стоит <b class="en">${q.right}</b>.`,
+      lsound:() => `Букву <b class="en">${q.l.toLowerCase()}</b> зовут «${LT[q.l].n}», а в словах она говорит «${q.right}»: ${anchor(q.l)}.`,
+      pic:() => `<b class="en">${q.w}</b> — «${WB[q.w].r}», ${WB[q.w].tr}.`,
+      gap:() => `<b class="en">${q.w}</b> — «${WB[q.w].r}». Первый звук «${LT[q.l].v}», это буква <b class="en">${q.right}</b>.`,
+      sread:() => `<b class="en">${q.w}</b> — «${q.right}», ${q.tr}.`,
+      yesno:() => `«${q.it.r}» — ${q.it.tr}`,
       vowel:() => q.right === 'l' ? `«${q.it.r}»: гласная говорит своё имя.` : `«${q.it.r}»: короткий голос.`
     })[q.kind]();
     after = `<p><span class="verdict ok">Верно!</span> ${why}</p>
@@ -811,6 +1184,7 @@ function quizScreen(st){
 }
 
 function resultScreen(){
+  if (DAYS[S.d].kind === 'read') return readResult();
   const ratio = S.total ? S.score / S.total : 0;
   const n = ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : 1;
   saveStars(S.d, n);
@@ -831,7 +1205,7 @@ function render(top){
   SAYS = [];
   const st = S.plan && S.plan[S.k];
   const screens = {song:songScreen, intro:introScreen, concept:s => conceptScreen(s.c), letter:s => letterScreen(s.l), alpha:alphaScreen,
-    vowels:vowelsScreen, magic:magicScreen, reading:readingScreen, quiz:quizScreen, result:resultScreen};
+    vowels:vowelsScreen, magic:magicScreen, rinfo:rinfoScreen, say:sayScreen, quiz:quizScreen, result:resultScreen};
   app.innerHTML = st ? screens[st.t](st) : menu();
   nav.innerHTML = st ? `<div class="bar" aria-label="Шаг ${S.k + 1} из ${S.plan.length}"><i style="width:${Math.round(100 * (S.k + 1) / S.plan.length)}%"></i></div>
     ${S.k > 0 || S.q > 0 ? '<button class="home" data-act="back">← Назад</button>' : ''}<span class="pts" aria-label="Баллы">⭐ ${S.score}</span><button class="home" data-act="home">Все уроки</button>` : '';
@@ -860,6 +1234,14 @@ document.addEventListener('click', e => {
   if (act === 'nextq') {
     const st = S.plan[S.k];
     if (S.q + 1 < st.qs.length) { S.q++; S.wrong = []; S.solved = false; speak([]); render(false); } else next();
+  }
+  if (act === 'reveal') { S.solved = true; render(false); }
+  if (act === 'hint') { (S.hints = S.hints || {})[S.k + '-' + S.q] = 1; render(false); }
+  if (act === 'mark') {
+    const st = S.plan[S.k], it = st.qs[S.q], key = S.k + '-' + S.q;
+    if (!S.seen[key]) { S.seen[key] = 1; S.total++;
+      if (b.dataset.o === 'ok') { S.score++; if (it.l) weakAdd(it.l, -1); } else if (it.l) S.missed.push(it.l); }
+    if (S.q + 1 < st.qs.length) { S.q++; S.wrong = []; S.solved = false; render(false); } else next();
   }
   if (act === 'pick') {
     const q = S.plan[S.k].qs[S.q], o = b.dataset.o;
